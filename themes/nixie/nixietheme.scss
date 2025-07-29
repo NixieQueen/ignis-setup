@@ -1,0 +1,44 @@
+* {
+    font-weight: bold;
+}
+
+// All the basic colours and things are defined here.
+// This is the biggest part of each theme
+
+$primary: #f4b8e4;
+$primary_off: #b78bab;
+$secondary: #ca9ee6;
+$secondary_off: #9b79af;
+$tertiary: #81c8be;
+$tertiary_off: #639991;
+$quaternary: #babbf1;
+$quaternary_off: #8f90ba;
+$quinary: #a6d189;
+$quinary_off: #7b9b66;
+
+$bg: #303446;
+$bg_off: #232732;
+$shadow: #01010199;
+$transparent: #51576d00;
+$fg: $primary;
+$fg_off: $primary_off;
+
+$text: #ffffff;
+$main_text: Fira Code;
+$main_text_weight: bold;
+$main_text_size: 24px;
+
+// Then every module is imported seperately here
+// Starting with the global stuff like floating windows
+@import "scss/mixins/window.scss";
+@import "scss/mixins/hover.scss";
+@import "scss/mixins/button.scss";
+@import "scss/mixins/widgetborder.scss";
+@import "scss/mixins/apps.scss";
+
+@import "scss/mixins/font.scss";
+
+// Then scss scripts for all the modules!
+
+@import "scss/toppanel.scss";
+@import "scss/taskbar.scss";

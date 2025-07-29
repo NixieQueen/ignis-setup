@@ -1,0 +1,7 @@
+@mixin hover($active_color: $primary, $inactive_color: $primary_off) {
+    background-color: $inactive_color;
+
+    &:hover {
+        background-color: $active_color;
+    }
+}

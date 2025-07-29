@@ -1,0 +1,6 @@
+@mixin apps {
+    @include window;
+    @include button($quaternary, $quaternary_off);
+    border-radius: 1rem;
+    margin: 0.25rem;
+}

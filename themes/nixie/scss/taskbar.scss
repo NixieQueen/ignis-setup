@@ -1,0 +1,24 @@
+* {
+    all: unset;
+}
+
+.taskbar {
+    @include window;
+}
+
+.taskbar_apps {
+    @include apps;
+    padding-bottom: 0rem;
+}
+
+.taskbar_apps_separators {
+    @include hover;
+    border-radius: 1rem;
+    padding: 0.3rem 1.8rem;
+    //margin: 0.25rem;
+    margin-bottom: 0rem;
+    margin-top: 0.4rem;
+    &.active {
+        background-color: $primary;
+    }
+}
