@@ -23,6 +23,6 @@ def get_theme_icon(app_name):
     apps = next(os.walk(theme_path))[2]
     apps_names = ['.'.join(app.split(".")[:-1]).lower() for app in apps]
     if not app_name.lower() in apps_names:
-        return
+        return ""
 
     return theme_path + "/" + apps[apps_names.index(app_name.lower())]

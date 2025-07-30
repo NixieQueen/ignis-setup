@@ -1,6 +1,6 @@
-@mixin apps {
+@mixin apps($active_color: $quaternary, $inactive_color: $quaternary_off) {
     @include window;
-    @include button($quaternary, $quaternary_off);
+    @include button($active_color, $inactive_color);
     border-radius: 1rem;
     margin: 0.25rem;
 }

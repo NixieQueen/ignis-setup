@@ -113,6 +113,20 @@ def generate_desktop_files_list():
                 pass
     return desktop_files
 
+
+class DesktopApps:
+
+    def __init__(self):
+        self.desktop_files = []
+        self.get_data()
+
+    def assign_desktop_files(self, desktop_files):
+        self.desktop_files = desktop_files
+
+    def get_data(self):
+        task = Utils.ThreadTask(target=generate_desktop_files_list, callback=lambda result, self=self: self.assign_desktop_files(result))
+        task.run()
+
+
 # Improve performance by using static typically used icon resolutions
 # instead of fetching and processing them each time
-#print(generate_desktop_files_list()[8].icon_path)

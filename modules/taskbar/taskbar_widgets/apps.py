@@ -17,6 +17,62 @@ from utils.themeicons import get_theme_icon
 hyprland = HyprlandService.get_default()
 
 
+class PinnedAppsHandler:
+
+    class PinnedApp:
+
+        def __init__(self, class_name, icon_path):
+            self.class_name = class_name
+            self.icon_path = icon_path
+
+    def __init__(self):
+        self.path = Utils.get_current_dir()
+        self.pinned_apps = []
+        try:
+            self.load_pinned_apps()
+        except FileNotFoundError:
+            pass
+
+    def load_pinned_apps(self):
+        self.pinned_apps = []
+        with open(f"{self.path}/pinned_apps") as pinned_app_file:
+            for line in pinned_app_file:
+                line = line.rstrip('\n')
+                line = line.split(": ")
+                self.pinned_apps.append(self.PinnedApp(line[0], line[1]))
+
+    def append_pinned_apps(self, pinned_app=None):
+        with open(f"{self.path}/pinned_apps","a") as pinned_app_file:
+            if pinned_app:
+                pinned_app_file.write(f"{pinned_app.class_name}: {pinned_app.icon_path}\n")
+
+            else:
+                for pinned_app in self.pinned_apps:
+                    pinned_app_file.write(f"{pinned_app.class_name}: {pinned_app.icon_path}\n")
+
+    def save_pinned_apps(self):
+        with open(f"{self.path}/pinned_apps","w") as pinned_app_file:
+            pinned_app_file.write("")
+
+        self.append_pinned_apps()
+
+    def add_pinned_app(self, class_name, icon_path):
+        if class_name in [pinned_app.class_name for pinned_app in self.pinned_apps]:
+            return
+
+        new_pinned_app = self.PinnedApp(class_name, icon_path)
+        self.pinned_apps.append(new_pinned_app)
+        self.append_pinned_apps(new_pinned_app)
+
+    def remove_pinned_app(self, class_name):
+        pinned_app_classnames = [pinned_app.class_name for pinned_app in self.pinned_apps]
+        if not class_name in pinned_app_classnames:
+            return
+
+        self.pinned_apps.pop(pinned_app_classnames.index(class_name))
+        self.save_pinned_apps()
+
+
 class ActiveAppBox(Widget.Box):
 
     def __init__(self, current_address: str, app_address: str):
@@ -30,23 +86,21 @@ class ActiveAppBox(Widget.Box):
 
 
 class App:
-    def __init__(self, class_name: str, addresses: list=[], icon: Widget.Icon=None, icon_size: int=56, terminal_format: str="kitty %command%"):
+    def __init__(self, class_name: str, pinned_apps: PinnedAppsHandler, addresses: list=[], icon_path: str="", icon_size: int=56):
         self.class_name = class_name
+        self.pinned_apps = pinned_apps
         self.addresses = addresses
-        self.icon = icon
-        self.icon_size = icon_size              # Probably not needed?
-        self.terminal_format = terminal_format  # Probably not needed?
-        self.pinned = False
-        self.hidden = False
         self.address_index = 0
+        self.icon_size = icon_size
 
-        if not self.icon:
+        if not icon_path:
             icon_path = get_theme_icon(class_name)
 
             if not icon_path:
                 icon_path = Utils.get_app_icon_name(class_name)
 
-            self.icon = Widget.Icon(image=icon_path, pixel_size=icon_size)
+        self.icon_path = icon_path
+        self.icon = Widget.Icon(image=icon_path, pixel_size=icon_size)
 
     def launch(self):
         hyprland.send_command(f"dispatch exec {self.class_name.lower()}")
@@ -66,40 +120,64 @@ class App:
         hyprland.send_command(f"dispatch closewindow address:{self.addresses[self.address_index]}")
 
     def pin(self):
-        return
+        self.pinned_apps.add_pinned_app(self.class_name, self.icon_path)
+
+    def unpin(self):
+        self.pinned_apps.remove_pinned_app(self.class_name)
 
 
 class AppButton(Widget.Button):
-    def __init__(self, app: App):
-        if app.hidden:
-            return
-
-        menu = Widget.PopoverMenu(
-            model=IgnisMenuModel(
-                IgnisMenuItem(label="Launch", on_activate=lambda x: app.launch()),
-                IgnisMenuItem(label="Pin", on_activate=lambda x: app.pin()),
-            )
-        )
-
-        separator_box = Widget.CenterBox(
-            center_widget=Widget.Box(
-                spacing = 5,
-                child=hyprland.bind_many(
-                    ["windows", "active_window"],
-                    transform=lambda x, client: [
-                        ActiveAppBox(client.address, address) for address in app.addresses
-                    ],
+    def __init__(self, app: App, menu: Widget.PopoverMenu=None, is_pinned: bool=False):
+        if not menu:
+            menu = Widget.PopoverMenu(
+                model=IgnisMenuModel(
+                    IgnisMenuItem(label="Launch", on_activate=lambda _: app.launch()),
+                    IgnisMenuItem(label="Pin", on_activate=lambda _: app.pin()),
                 )
             )
-        )
-        icon_box = Widget.Box(child=[app.icon, separator_box], vertical=True)
 
-        super().__init__(
-            child=Widget.Box(child=[icon_box, menu]),
-            on_click=lambda x: app.focus(),
-            on_right_click=lambda x: menu.popup(),
-            css_classes=["taskbar_apps", "unset"],
+        if app.addresses:
+            separator_box = Widget.CenterBox(
+                center_widget=Widget.Box(
+                    spacing = 5,
+                    child=hyprland.bind_many(
+                        ["windows", "active_window"],
+                        transform=lambda _, client: [
+                            ActiveAppBox(client.address, address) for address in app.addresses
+                        ],
+                    )
+                )
+            )
+            icon_box = Widget.Box(child=[app.icon, separator_box], vertical=True)
+        else:
+            icon_box = app.icon
+
+        if not is_pinned:
+            super().__init__(
+                child=Widget.Box(child=[icon_box, menu]),
+                on_click=lambda _: app.focus(),
+                on_right_click=lambda _: menu.popup(),
+                css_classes=["taskbar_apps", "unset"],
+            )
+        else:
+            super().__init__(
+                child=Widget.Box(child=[icon_box, menu]),
+                on_click=lambda _: app.launch(),
+                on_right_click=lambda _: menu.popup(),
+                css_classes=["taskbar_apps", "pinned"],
+            )
+
+
+class PinnedAppButton(AppButton):
+
+    def __init__(self, app: App):
+        menu = Widget.PopoverMenu(
+            model=IgnisMenuModel(
+                IgnisMenuItem(label="Launch", on_activate=lambda _: app.launch()),
+                IgnisMenuItem(label="Unpin", on_activate=lambda _: app.unpin()),
+            )
         )
+        super().__init__(app, menu, is_pinned=True)
 
 
 class AppLauncher(Widget.Box):
@@ -108,12 +186,15 @@ class AppLauncher(Widget.Box):
 
 
 class PinnedApps(Widget.Box):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, pinned_apps):
+        super().__init__(
+            child=[PinnedAppButton(App(pinned_app.class_name, pinned_apps, icon_path=pinned_app.icon_path)) for pinned_app in pinned_apps.pinned_apps]
+        )
 
 
 class ActiveApps(Widget.Box):
-    def __init__(self):
+    def __init__(self, pinned_apps):
+        self.pinned_apps = pinned_apps
         super().__init__(
             child=hyprland.bind(
                 "windows",
@@ -123,7 +204,7 @@ class ActiveApps(Widget.Box):
 
     def generate_app_list(self, windows):
         active_windows = self.sort_windows(windows)
-        return [AppButton(App(w_class, active_windows[w_class])) for w_class in active_windows]
+        return [AppButton(App(w_class, pinned_apps, active_windows[w_class])) for w_class in active_windows]
 
     def sort_windows(self, windows):
         # Make this function return a dictionary of all active apps sorted by class_name
@@ -137,13 +218,15 @@ class ActiveApps(Widget.Box):
         return active_windows
 
 
-# Figure out how to first get a big list of all active apps, then sort them and finally make the appitem thing
+pinned_apps = PinnedAppsHandler()
 
 
-class Apps (Widget.CenterBox):
+class Apps (Widget.Box):
     def __init__(self):
         super().__init__(
-            start_widget = AppLauncher(),   # The launcher button, as just one button
-            center_widget = PinnedApps(),   # A list, precompiled from some txt file, of all pinned apps
-            end_widget = ActiveApps(),      # All apps that are open right now
+            child=[
+                AppLauncher(),              # The launcher button, as just one button
+                PinnedApps(pinned_apps),   # A list, precompiled from some txt file, of all pinned apps
+                ActiveApps(pinned_apps),      # All apps that are open right now
+            ]
         )

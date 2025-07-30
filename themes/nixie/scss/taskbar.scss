@@ -4,11 +4,17 @@
 
 .taskbar {
     @include window;
+    //margin-left: 50rem;
+    //margin-right: 50rem;
 }
 
 .taskbar_apps {
     @include apps;
     padding-bottom: 0rem;
+    &.pinned {
+        padding-bottom: 0.50rem;
+        @include apps($tertiary, $tertiary_off)
+    }
 }
 
 .taskbar_apps_separators {

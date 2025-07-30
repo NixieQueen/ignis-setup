@@ -15,7 +15,7 @@ class Config:
 
     def __init__(self, path):
         self.config = dict()
-        self.configName = f"{path}/ignisconfig/config.txt"
+        self.configName = f"{path}/utils/config"
 
         self.read_config()
 

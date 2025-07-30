@@ -1,8 +1,5 @@
 @mixin widgetborder {
-    background-color: $quaternary_off;
+    box-shadow: 4px 4px 1px 1px $shadow;
+    background-color: $tertiary_off;
     border-radius: 1.5rem;
-    //padding: 0.2rem;
-    color: $text;
-    //box-shadow: 6px 6px 2px 2px $shadow;
-    //margin: 0.7rem;
 }
