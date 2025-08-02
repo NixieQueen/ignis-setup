@@ -13,7 +13,7 @@ from .toppanel_widgets import Workspace, Clock
 
 def toppanel_creator(monitor_id: int=0) -> Widget.Window:
     return Widget.Window(
-        namespace=f"ignis_top_panel_{monitor_id}",
+        namespace=f"ignis_toppanel_{monitor_id}",
         monitor=monitor_id,
         anchor=["left", "top", "right"],
         exclusivity="exclusive",

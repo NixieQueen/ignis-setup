@@ -12,6 +12,7 @@ from ignis import widgets as Widget
 from ignis.menu_model import IgnisMenuModel, IgnisMenuItem
 from ignis import utils as Utils
 from ignis.services.hyprland import HyprlandService
+from utils.ignisconfig import Config
 from utils.themeicons import get_theme_icon
 
 hyprland = HyprlandService.get_default()
@@ -86,12 +87,13 @@ class ActiveAppBox(Widget.Box):
 
 
 class App:
-    def __init__(self, class_name: str, pinned_apps: PinnedAppsHandler, addresses: list=[], icon_path: str="", icon_size: int=56):
+    def __init__(self, class_name: str, pinned_apps: PinnedAppsHandler | None=None, addresses: list=[], icon_path: str="", exec_cmd: str="", icon_size: int=56):
         self.class_name = class_name
         self.pinned_apps = pinned_apps
         self.addresses = addresses
         self.address_index = 0
         self.icon_size = icon_size
+        self.exec_cmd = exec_cmd if exec_cmd else class_name.lower()
 
         if not icon_path:
             icon_path = get_theme_icon(class_name)
@@ -103,7 +105,7 @@ class App:
         self.icon = Widget.Icon(image=icon_path, pixel_size=icon_size)
 
     def launch(self):
-        hyprland.send_command(f"dispatch exec {self.class_name.lower()}")
+        hyprland.send_command(f"dispatch exec {self.exec_cmd}")
 
     def focus(self):
         if not self.addresses:
@@ -120,9 +122,15 @@ class App:
         hyprland.send_command(f"dispatch closewindow address:{self.addresses[self.address_index]}")
 
     def pin(self):
+        if not self.pinned_apps:
+            return
+
         self.pinned_apps.add_pinned_app(self.class_name, self.icon_path)
 
     def unpin(self):
+        if not self.pinned_apps:
+            return
+
         self.pinned_apps.remove_pinned_app(self.class_name)
 
 
@@ -186,16 +194,18 @@ class AppLauncher(Widget.Box):
 
 
 class PinnedApps(Widget.Box):
-    def __init__(self, pinned_apps):
+    def __init__(self, pinned_apps, config):
         super().__init__(
+            vertical=True if config.config['taskbar'] == "unity" else False,
             child=[PinnedAppButton(App(pinned_app.class_name, pinned_apps, icon_path=pinned_app.icon_path)) for pinned_app in pinned_apps.pinned_apps]
         )
 
 
 class ActiveApps(Widget.Box):
-    def __init__(self, pinned_apps):
+    def __init__(self, pinned_apps, config):
         self.pinned_apps = pinned_apps
         super().__init__(
+            vertical=True if config.config['taskbar'] == "unity" else False,
             child=hyprland.bind(
                 "windows",
                 transform=lambda windows: self.generate_app_list(windows)
@@ -222,11 +232,12 @@ pinned_apps = PinnedAppsHandler()
 
 
 class Apps (Widget.Box):
-    def __init__(self):
+    def __init__(self, config: Config):
         super().__init__(
+            vertical=True if config.config['taskbar'] == "unity" else False,
             child=[
                 AppLauncher(),              # The launcher button, as just one button
-                PinnedApps(pinned_apps),   # A list, precompiled from some txt file, of all pinned apps
-                ActiveApps(pinned_apps),      # All apps that are open right now
+                PinnedApps(pinned_apps, config),   # A list, precompiled from some txt file, of all pinned apps
+                ActiveApps(pinned_apps, config),      # All apps that are open right now
             ]
         )
