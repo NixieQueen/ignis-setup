@@ -1,3 +1,6 @@
-thunar: /home/nixie/Documents/git projects/ignis/themes/nixie/apps/thunar.svg
-Emacs: /home/nixie/Documents/git projects/ignis/themes/nixie/apps/emacs.svg
-kitty: /home/nixie/Documents/git projects/ignis/themes/nixie/apps/kitty.svg
+steam: /home/nixie/Documents/git-projects/ignis/themes/nixie/apps/steam.svg
+discord: /home/nixie/Documents/git-projects/ignis/themes/nixie/apps/discord.png
+kitty: /home/nixie/Documents/git-projects/ignis/themes/nixie/apps/kitty.svg
+spotify: spotify-client
+librewolf: /home/nixie/Documents/git-projects/ignis/themes/nixie/apps/librewolf.svg
+thunar: /home/nixie/Documents/git-projects/ignis/themes/nixie/apps/thunar.svg
