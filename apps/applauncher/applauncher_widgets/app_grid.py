@@ -9,27 +9,45 @@
 #                                  ╚══╝ ╚╝              ╚══╝                               ╚╝
 #
 from ignis import widgets as Widget
-from ignis.window_manager import WindowManager
-from utils.desktopicons import DesktopApps
-
-from .applauncher_widgets import AppGrid
+from modules.taskbar.taskbar_widgets.apps import AppButton, App
 
 
-window_manager = WindowManager.get_default()
-# window_manager.open("ignis_applauncher_blur_{monitor_id}")
+class AppGrid(Widget.Grid):
 
-class applauncher(Widget.Window):
+    def __init__(self, apps):
+        self.page_index = 0
+        self.apps = apps
+        self.pages = self.build_pages()
 
-    def __init__(self, apps: DesktopApps, monitor_id: int=0):
         super().__init__(
-            namespace=f"ignis_applauncher_blur_{monitor_id}",
-            visible=False,
-            monitor=monitor_id,
-            anchor=["top", "left", "bottom", "right"],
-            exclusivity="ignore",
-            layer="overlay",
-            kb_mode="exclusive",
-            popup=True,
-            css_classes=["applauncher", "unset"]
+            column_num=10,
+            #row_num=3,  # Gets ignored when column is specified
             child=[],
         )
+
+        self.change_page(1)
+
+    def change_page(self, new_page):
+        if self.page_index == new_page or new_page > len(self.pages) or new_page < 0:
+            return
+
+        self.page_index = new_page
+        self.child = self.pages[new_page]
+
+    def build_pages(self):
+        pages = dict()
+        if not self.apps:
+            return pages
+
+        size_apps = len(self.apps)
+        full_pages = size_apps // 30  # Returns a 'full page' per 30 apps
+
+        for i in range(1, size_apps+1):
+            pages[i] = [AppButton(App(page_app.name, icon_path=page_app.icon_path, exec_cmd=page_app.exec_cmd)) for page_app in self.apps[0+30*i:30+30*i]]
+
+
+        if size_apps > full_pages * 30:
+            last_page_index = full_pages + 1
+            pages[last_page_index] = [AppButton(App(page_app.name, icon_path=page_app.icon_path, exec_cmd=page_app.exec_cmd)) for page_app in self.apps[0+30*last_page_index:]]
+
+        return pages
