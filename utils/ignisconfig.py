@@ -22,6 +22,9 @@ class Config:
     def read_config(self):
         with open(self.configName) as configFile:
             for line in configFile:
+                if line[0] == "#":
+                    continue
+
                 line = line.rstrip('\n')
                 line = line.split(': ')
                 self.config[line[0]] = line[1]

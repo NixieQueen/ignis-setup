@@ -86,7 +86,7 @@ class ActiveAppBox(Widget.Box):
 
 
 class App:
-    def __init__(self, class_name: str, pinned_apps: PinnedAppsHandler, addresses: list=[], icon_path: str="", icon_size: int=56):
+    def __init__(self, class_name: str, pinned_apps: PinnedAppsHandler, addresses: list=[], icon_path: str="", icon_size: int=50):
         self.class_name = class_name
         self.pinned_apps = pinned_apps
         self.addresses = addresses
@@ -186,16 +186,26 @@ class AppLauncher(Widget.Box):
 
 
 class PinnedApps(Widget.Box):
-    def __init__(self, pinned_apps):
+    def __init__(self, pinned_apps, config):
+        self.pinned_apps = pinned_apps
         super().__init__(
-            child=[PinnedAppButton(App(pinned_app.class_name, pinned_apps, icon_path=pinned_app.icon_path)) for pinned_app in pinned_apps.pinned_apps]
+            vertical = True if config.config['taskbar_position'] == 'unity' else False,
+            child=hyprland.bind(
+                "windows",
+                transform=lambda windows: self.generate_pinnedapp_list(windows)
+            )
         )
+
+    def generate_pinnedapp_list(self, windows):
+        hyprland_window_classnames = [window.class_name for window in windows]
+        return [PinnedAppButton(App(pinned_app.class_name, pinned_apps, icon_path=pinned_app.icon_path)) for pinned_app in self.pinned_apps.pinned_apps if pinned_app.class_name not in hyprland_window_classnames]
 
 
 class ActiveApps(Widget.Box):
-    def __init__(self, pinned_apps):
+    def __init__(self, pinned_apps, config):
         self.pinned_apps = pinned_apps
         super().__init__(
+            vertical = True if config.config['taskbar_position'] == 'unity' else False,
             child=hyprland.bind(
                 "windows",
                 transform=lambda windows: self.generate_app_list(windows)
@@ -222,11 +232,12 @@ pinned_apps = PinnedAppsHandler()
 
 
 class Apps (Widget.Box):
-    def __init__(self):
+    def __init__(self, config):
         super().__init__(
+            vertical = True if config.config['taskbar_position'] == 'unity' else False,
             child=[
                 AppLauncher(),              # The launcher button, as just one button
-                PinnedApps(pinned_apps),   # A list, precompiled from some txt file, of all pinned apps
-                ActiveApps(pinned_apps),      # All apps that are open right now
+                PinnedApps(pinned_apps, config),   # A list, precompiled from some txt file, of all pinned apps
+                ActiveApps(pinned_apps, config),      # All apps that are open right now
             ]
         )

@@ -59,4 +59,4 @@ from modules.taskbar import taskbar_creator
 for i in range(Utils.get_n_monitors()):
     print(i)
     toppanel_creator(i)
-    taskbar_creator(i)
+    taskbar_creator(monitor_id=i, config=config)

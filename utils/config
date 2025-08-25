@@ -1,1 +1,7 @@
+### A big configuration file
+# Theme name, should be the same as the folder found under 'themes'
 theme: nixie
+# Taskbar position, either standard, floating or unity
+taskbar_position: unity
+# Taskbar anchor, either linux or windows. 'Linux' is ignored when taskbar_position is set to unity
+taskbar_anchor: windows

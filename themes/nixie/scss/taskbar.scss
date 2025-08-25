@@ -4,8 +4,14 @@
 
 .taskbar {
     @include window;
+    padding-left: 3rem;
+    padding-right: 3rem;
     //margin-left: 50rem;
     //margin-right: 50rem;
+}
+
+.taskbar_unity {
+    @include window;
 }
 
 .taskbar_apps {
