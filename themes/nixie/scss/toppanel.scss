@@ -4,7 +4,7 @@
 
 .toppanel {
     @include window;
-    transition: 5.0s;
+    //transition: 5.0s;
 }
 
 .toppanel_workspace {
@@ -23,7 +23,7 @@
 }
 
 .toppanel_clock {
-    @include button($tertiary, $tertiary_off);
+    @include button($quaternary, $quaternary_off);
     //box-shadow: 0px 0px 0px 0px;
     margin: 0rem;
     padding: 0rem 0.5rem;

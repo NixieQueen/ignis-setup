@@ -1,0 +1,31 @@
+* {
+    all: unset;
+}
+
+.applauncher {
+    @include window;
+
+    .app {
+        @include apps;
+        padding: 0.6rem;
+        margin: 0.35rem;
+        &.selected {
+            @include apps($tertiary, $tertiary_off)
+        }
+    }
+
+    .gridbutton {
+        @include button;
+        &.active {
+            padding: 0.8rem 1.5rem;
+            @include hover($secondary, $secondary_off);
+        }
+    }
+
+    .searchbar {
+        @include window;
+        @include font;
+        background-color: $quaternary;
+        padding: 0.8rem 5.0rem;
+    }
+}

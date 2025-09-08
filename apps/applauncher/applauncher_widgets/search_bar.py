@@ -10,37 +10,28 @@
 #
 from ignis import widgets as Widget
 
-from .taskbar_widgets import Apps
 
-def get_anchor(config):
-    match config.config['taskbar_position']:
-        case 'standard':
-            return ["left", "bottom", "right"]
+class SearchBar(Widget.CenterBox):
 
-        case 'unity':
-            return ["top", "left", "bottom"]
+    def __init__(self, appgrid):
+        self.appgrid = appgrid
 
-        case 'floating':
-            return ["bottom"]
+        self.bar = Widget.Entry(
+            css_classes = ["applauncher", "searchbar"],
+            placeholder_text="Search...",
+            on_accept=lambda _: self.run_first_found_app(),
+            on_change=lambda x: appgrid.search_apps(search_prompt=x.text)
+        )
 
+        super().__init__(
+            start_widget = Widget.Box(),
+            center_widget = self.bar,
+            end_widget = Widget.Box()
+        )
 
-def taskbar_creator(config, desktopfiles, monitor_id: int=0) -> Widget.Window:
-    return Widget.Window(
-        namespace=f"ignis_taskbar_panel_{monitor_id}",
-        monitor=monitor_id,
-        anchor=get_anchor(config),
-        exclusivity="normal" if config.config['taskbar_position'] == 'floating' else "exclusive",
-        #layer = "overlay",
-        child=Widget.CenterBox(
-            css_classes=["taskbar"],
-            start_widget=Widget.Box(),
-            center_widget=Widget.Box(child=[Apps(config=config, desktopfiles=desktopfiles, monitor_id=monitor_id)]),
-            end_widget=Widget.Box(),
-        ) if (config.config['taskbar_anchor'] == 'linux' and (not config.config['taskbar_position'] == 'unity')) else
-        Widget.CenterBox(
-            css_classes=["taskbar_unity"],
-            start_widget=Widget.Box(child=[Apps(config=config, desktopfiles=desktopfiles, monitor_id=monitor_id)]),
-            center_widget=Widget.Box(),
-            end_widget=Widget.Box(),
-        ),
-    )
+    def run_first_found_app(self):
+        appgrid_apps = self.appgrid.pages[self.appgrid.page_index]
+        if len(appgrid_apps) <= 0:
+            return
+
+        appgrid_apps[0].applaunch()

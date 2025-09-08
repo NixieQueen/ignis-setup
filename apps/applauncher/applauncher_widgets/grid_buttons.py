@@ -10,37 +10,31 @@
 #
 from ignis import widgets as Widget
 
-from .taskbar_widgets import Apps
 
-def get_anchor(config):
-    match config.config['taskbar_position']:
-        case 'standard':
-            return ["left", "bottom", "right"]
+class appGridButton(Widget.Button):
 
-        case 'unity':
-            return ["top", "left", "bottom"]
-
-        case 'floating':
-            return ["bottom"]
+    def __init__(self, button_index, appgrid):
+        super().__init__(
+            css_classes = ["applauncher", "gridbutton"],
+            on_click=lambda _: appgrid.change_page(button_index)
+        )
+        if appgrid.page_index == button_index:
+            self.add_css_class("active")
 
 
-def taskbar_creator(config, desktopfiles, monitor_id: int=0) -> Widget.Window:
-    return Widget.Window(
-        namespace=f"ignis_taskbar_panel_{monitor_id}",
-        monitor=monitor_id,
-        anchor=get_anchor(config),
-        exclusivity="normal" if config.config['taskbar_position'] == 'floating' else "exclusive",
-        #layer = "overlay",
-        child=Widget.CenterBox(
-            css_classes=["taskbar"],
-            start_widget=Widget.Box(),
-            center_widget=Widget.Box(child=[Apps(config=config, desktopfiles=desktopfiles, monitor_id=monitor_id)]),
-            end_widget=Widget.Box(),
-        ) if (config.config['taskbar_anchor'] == 'linux' and (not config.config['taskbar_position'] == 'unity')) else
-        Widget.CenterBox(
-            css_classes=["taskbar_unity"],
-            start_widget=Widget.Box(child=[Apps(config=config, desktopfiles=desktopfiles, monitor_id=monitor_id)]),
-            center_widget=Widget.Box(),
-            end_widget=Widget.Box(),
-        ),
-    )
+class appGridButtons(Widget.CenterBox):
+
+    def __init__(self, appgrid):
+        self.appgrid = appgrid
+        super().__init__(
+            start_widget = Widget.Box(),
+            center_widget = Widget.Box(child=[appGridButton(button_index=i, appgrid=appgrid) for i in appgrid.pages]),
+            end_widget = Widget.Box()
+        )
+
+    def update_content(self):
+        if not self.appgrid.pages:
+            self.center_widget.child = Widget.Box()
+            return
+
+        self.center_widget.child = [appGridButton(button_index=i, appgrid=self.appgrid) for i in self.appgrid.pages]

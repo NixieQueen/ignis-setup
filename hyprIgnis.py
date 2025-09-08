@@ -44,13 +44,22 @@ css_manager.apply_css(
 #
 
 # Starting with some heavy utils that multiple functions may want to call
-from utils.desktopicons import DesktopApps
-#desktop_apps = DesktopApps()  # This works, but figure out a way to call a function once this has finished!
+from utils.desktopfiles import DesktopApps
+desktop_apps = DesktopApps(config)  # This works, but figure out a way to call a function once this has finished!
+
+from utils.wallpaperservice import WallpaperService
+wallpaper = WallpaperService(config)
 
 # And ending on the actual modules themselves
 
 from modules.top_panel import toppanel_creator
 from modules.taskbar import taskbar_creator
+
+
+#
+# Apps, defined as being modules that operate seperately from the desktop
+#
+from apps.applauncher import applauncher
 
 #
 # And finally run the modules on all monitors
@@ -59,4 +68,5 @@ from modules.taskbar import taskbar_creator
 for i in range(Utils.get_n_monitors()):
     print(i)
     toppanel_creator(i)
-    taskbar_creator(monitor_id=i, config=config)
+    taskbar_creator(monitor_id=i, config=config, desktopfiles=desktop_apps)
+    applauncher(monitor_id=i, apps=desktop_apps)
