@@ -16,6 +16,7 @@
 # : Bluetooth
 #
 import datetime
+import asyncio
 from ignis import widgets as Widget
 from ignis.services.audio import AudioService
 from ignis.services.upower import UPowerService
@@ -151,15 +152,55 @@ class PowerButton(ServiceHover):
         )
 
     
-class WifiButton(ServiceHover):
+class NetworkButton(ServiceHover):
 
-    def __init__(self):
+    def __init__(self, networktype):
+        self.networktype = networktype
+        self.networkdevice = Network.ethernet.devices[0] if networktype == 'ethernet' \
+            else Network.wifi.devices[0]
+        self.networkparent = Network.ethernet if networktype == 'ethernet' else Network.wifi
         # Icons:
         # wired - wireless
         # network-{}-disconnected-symbolic
         # network-{}-symbolic
-        # 
-        pass
+        #
+        if networktype == 'ethernet':
+            label_name = Widget.Label(
+                css_classes=['toppanel_font'],
+                label=self.networkdevice.bind('name', lambda x: f"'{x}'")
+            )
+            label_speed = Widget.Label(
+                css_classes=['toppanel_font'],
+                label=self.networkdevice.bind('speed', lambda x: f"{x}Mhz")
+            )
+            network_child = Widget.Box(child=[label_name, label_speed], spacing=5)
+        else:
+            label_name = Widget.Label(
+                css_classes=['toppanel_font'],
+                label=self.networkdevice.ap.bind('ssid', lambda x: f"'{x}'")
+            )
+            label_speed = Widget.Label(
+                css_classes=['toppanel_font'],
+                label=self.networkdevice.ap.bind('strength', lambda x: f"{x}%")
+            )
+            network_child = Widget.Box(child=[label_name, label_speed], spacing=5)
+        
+        super().__init__(
+            icon_image=self.networkparent.bind('icon_name'),
+            info_child=network_child,
+            on_click=lambda _: self.toggle_network()
+        )
+
+    def toggle_network(self):
+        if self.networktype == 'ethernet':
+            if self.networkdevice.is_connected:
+                asyncio.create_task(self.networkdevice.disconnect_from())
+                return
+            
+            asyncio.create_task(self.networkdevice.connect_to())
+            return
+
+        self.networkparent.enabled = not self.networkparent.enabled        
 
 
 class BluetoothButton(ServiceHover):
@@ -191,9 +232,10 @@ class Services(Widget.Box):
             #child.append('')
 
         if Network.wifi.devices or Network.ethernet.devices:
-            pass
+            service_child.append(
+                NetworkButton(networktype='ethernet' if Network.ethernet.devices else 'wifi')
+            )
             # Add network if it is present
-            #child.append('')
         
         super().__init__(
             child=service_child
