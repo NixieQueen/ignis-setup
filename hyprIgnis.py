@@ -18,6 +18,10 @@ from ignis import utils as Utils
 from ignis.css_manager import CssManager, CssInfoPath
 from utils.ignisconfig import Config
 
+#from ignis.services.applications import ApplicationsService
+#applications = ApplicationsService.get_default()
+#print(len(applications.apps))
+
 import sys
 sys.path.append(".")
 

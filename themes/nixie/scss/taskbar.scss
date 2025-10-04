@@ -19,7 +19,7 @@
     padding-bottom: 0rem;
     &.pinned {
         padding-bottom: 0.50rem;
-        @include apps($tertiary, $tertiary_off)
+        //@include apps($tertiary, $tertiary_off)
     }
 }
 

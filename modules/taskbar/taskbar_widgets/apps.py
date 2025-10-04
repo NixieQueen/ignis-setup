@@ -15,6 +15,7 @@ from ignis.window_manager import WindowManager
 from ignis.services.hyprland import HyprlandService
 from utils.desktopicons import App
 
+
 hyprland = HyprlandService.get_default()
 window_manager = WindowManager.get_default()
 
@@ -92,6 +93,7 @@ class ActiveAppBox(Widget.Box):
 
 class AppButton(Widget.Button):
     def __init__(self, app: App, menu: Widget.PopoverMenu=None, is_pinned: bool=False):
+        self.app = app
         if not menu:
             menu = Widget.PopoverMenu(
                 model=IgnisMenuModel(
@@ -134,6 +136,7 @@ class AppButton(Widget.Button):
 class PinnedAppButton(AppButton):
 
     def __init__(self, app: App):
+        self.app = app
         menu = Widget.PopoverMenu(
             model=IgnisMenuModel(
                 IgnisMenuItem(label="Launch", on_activate=lambda _: app.launch()),
@@ -156,6 +159,7 @@ class PinnedApps(Widget.Box):
     def __init__(self, pinned_apps, config):
         self.config = config
         self.pinned_apps = pinned_apps
+        self.app_list = []
         super().__init__(
             vertical = True if config.config['taskbar_position'] == 'unity' else False,
             child=hyprland.bind(
@@ -166,16 +170,29 @@ class PinnedApps(Widget.Box):
 
     def generate_pinnedapp_list(self, windows):
         hyprland_window_classnames = [window.class_name for window in windows]
-        return [
-            PinnedAppButton(
-                App(
-                    class_name=pinned_app.class_name,
-                    theme=self.config.config['theme'],
-                    pinned_apps=self.pinned_apps,
-                    icon_path=pinned_app.icon_path
+        pinned_app_list = [pinned_app for pinned_app in self.pinned_apps.pinned_apps if pinned_app.class_name not in hyprland_window_classnames]
+        old_app_list = self.app_list.copy()
+        self.app_list = []
+
+        old_app_list_names = [old_app.app.class_name for old_app in old_app_list]
+        
+        for pinned_app in pinned_app_list:
+            if pinned_app.class_name in old_app_list_names:
+                app = old_app_list[old_app_list_names.index(pinned_app.class_name)]
+            else:
+                app = PinnedAppButton(
+                    App(
+                        class_name=pinned_app.class_name,
+                        theme=self.config.config['theme'],
+                        pinned_apps=self.pinned_apps,
+                        icon_path=pinned_app.icon_path
+                    )
                 )
-            ) for pinned_app in self.pinned_apps.pinned_apps if pinned_app.class_name not in hyprland_window_classnames
-        ]
+            self.app_list.append(app) 
+
+        del old_app_list_names
+        del old_app_list
+        return self.app_list
 
 
 class ActiveApps(Widget.Box):
@@ -183,6 +200,7 @@ class ActiveApps(Widget.Box):
         self.config = config
         self.desktopfiles = desktopfiles
         self.pinned_apps = pinned_apps
+        self.app_list = []
         super().__init__(
             vertical = True if config.config['taskbar_position'] == 'unity' else False,
             child=hyprland.bind(
@@ -193,18 +211,36 @@ class ActiveApps(Widget.Box):
 
     def generate_app_list(self, windows):
         active_windows = self.sort_windows(windows)
-        return [
-            AppButton(
-                App(
-                    class_name=w_class,
-                    theme=self.config.config['theme'],
-                    pinned_apps=self.pinned_apps,
-                    addresses=active_windows[w_class],
-                    desktopfiles=self.desktopfiles
-                )
-            ) for w_class in active_windows
-        ]
+        old_app_list = self.app_list.copy()
+        self.app_list = []
 
+        old_app_list_names = [old_app.app.class_name for old_app in old_app_list]
+        
+        for w_class in active_windows:
+            if w_class in old_app_list_names:
+                old_app_index = old_app_list_names.index(w_class)
+                if old_app_list[old_app_index].app.addresses != active_windows[w_class]:
+                   old_app_list[old_app_index].app.addresses = active_windows[w_class] 
+                
+                self.app_list.append(old_app_list[old_app_list_names.index(w_class)])
+                continue
+            
+            self.app_list.append(
+                AppButton(
+                    App(
+                        class_name=w_class,
+                        theme=self.config.config['theme'],
+                        pinned_apps=self.pinned_apps,
+                        addresses=active_windows[w_class],
+                        desktopfiles=self.desktopfiles
+                    )
+                )
+            )
+
+        del old_app_list_names
+        del old_app_list
+        return self.app_list
+        
     def sort_windows(self, windows):
         # Make this function return a dictionary of all active apps sorted by class_name
         active_windows = {}

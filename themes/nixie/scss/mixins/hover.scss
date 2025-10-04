@@ -1,4 +1,5 @@
 @mixin hover($active_color: $primary, $inactive_color: $primary_off) {
+    transition: 0.3s;
     background-color: $inactive_color;
 
     &:hover {

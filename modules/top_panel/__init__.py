@@ -9,7 +9,7 @@
 #                                  ╚══╝ ╚╝              ╚══╝                               ╚╝
 #
 from ignis import widgets as Widget
-from .toppanel_widgets import Workspace, Clock
+from .toppanel_widgets import Workspace, Clock, Services
 
 def toppanel_creator(monitor_id: int=0) -> Widget.Window:
     return Widget.Window(
@@ -22,6 +22,6 @@ def toppanel_creator(monitor_id: int=0) -> Widget.Window:
             css_classes=["toppanel"],
             start_widget=Widget.Box(child=[Workspace()]),
             center_widget=Widget.Box(child=[Clock()]),
-            end_widget=Widget.Box(),
+            end_widget=Widget.Box(child=[Services()]),
         ),
     )

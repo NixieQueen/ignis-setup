@@ -36,8 +36,6 @@ class App:
 
                 if not icon_path and desktopfiles:
                     desktopfile_names = [desktopfile.name.lower() for desktopfile in desktopfiles.desktop_files.value]
-                    print(class_name)
-                    print(desktopfile_names)
                     if class_name.lower() in desktopfile_names:
                         icon_path = desktopfiles.desktop_files.value[desktopfile_names.index(class_name.lower())].icon_path
 

@@ -153,7 +153,7 @@ class DesktopApps:
                     # The following seeks to remove as much clutter as possible
                     # May  result in broken exec commands!
                     exec_cmd = application_file['Exec'].split(' ')
-                    exec_cmd = [exec_cmd_part for exec_cmd_part in exec_cmd if exec_cmd_part[0] != '%' and exec_cmd_part[0:2] != '--']
+                    exec_cmd = [exec_cmd_part for exec_cmd_part in exec_cmd if exec_cmd_part[0] != '%' and (exec_cmd_part[0:2] != '--' or exec_cmd_part == '--gui')]
                     exec_cmd = ' '.join(exec_cmd)
 
                     desktop_files.append(
