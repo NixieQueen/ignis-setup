@@ -15,6 +15,7 @@
 # : Network
 # : Bluetooth
 #
+import datetime
 from ignis import widgets as Widget
 from ignis.services.audio import AudioService
 from ignis.services.upower import UPowerService
@@ -139,12 +140,13 @@ class PowerButton(ServiceHover):
             css_classes=["toppanel_slider"]
         )
         label = Widget.Label(
-            label=powerdevice.bind('time_remaining', lambda x: str(x))
+            css_classes=['toppanel_font'],
+            label=powerdevice.bind('time_remaining', lambda x: str(datetime.timedelta(seconds=x)))
         )
 
         super().__init__(
             icon_image=powerdevice.bind('icon_name'),
-            info_child=Widget.Box(child=[label, slider]),
+            info_child=Widget.Box(child=[label, slider], spacing=5),
             on_click=lambda _: None
         )
 
