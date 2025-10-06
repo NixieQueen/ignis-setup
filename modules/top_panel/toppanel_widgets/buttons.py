@@ -19,9 +19,11 @@ from .services import ServiceHover
 from ignis import widgets as Widget
 from ignis.services.systemd import SystemdService
 from ignis.services.hyprland import HyprlandService
+from ignis.services.fetch import FetchService
 from ignis import utils as Utils
 
 
+fetch = FetchService.get_default()
 hyprland = HyprlandService.get_default()
 systemd_session = SystemdService.get_default()
 hypridle_unit = systemd_session.get_unit('hypridle.service')
@@ -31,9 +33,14 @@ gamemode_buttons = []
 class hyprIdleButton(ServiceHover):
 
     def __init__(self):
+        self.label = Widget.Label(
+            label = hypridle_unit.bind('is_active', lambda x: 'Ready to sleep...' if x else "I'm awake!"),
+            css_classes = ['toppanel_font']
+        )
+     
         super().__init__(
             icon_image='gnome-disks-state-standby-symbolic',
-            info_child=Widget.Box(),
+            info_child=self.label,
             on_click=lambda _: self.toggle_hypridle()
         )
         self.service_button.css_classes = hypridle_unit.bind(
@@ -54,9 +61,15 @@ class gamingButton(ServiceHover):
 
     def __init__(self):
         self.gamemode = False
+
+        self.label = Widget.Label(
+            label = 'Gamemode is disabled',
+            css_classes = ['toppanel_font']
+        )
+        
         super().__init__(
             icon_image='applications-games-symbolic',
-            info_child=Widget.Box(),
+            info_child=self.label,
             on_click=lambda _: self.toggle_gamemode()
         )
         self.service_button.css_classes = ['toppanel_button', 'disabled']
@@ -67,6 +80,7 @@ class gamingButton(ServiceHover):
             gaming_button = button.gaming_button  # Works because it requires itself to be always present
             gaming_button.gamemode = self.gamemode
             gaming_button.service_button.css_classes = ['toppanel_button'] if self.gamemode else ['toppanel_button', 'disabled']
+            gaming_button.label.label = "Gamemode is enabled" if self.gamemode else "Gamemode is disabled"
 
         performance_toggle = 'false' if self.gamemode else 'true'
         asyncio.create_task(Utils.exec_sh_async(
@@ -77,12 +91,21 @@ class gamingButton(ServiceHover):
 class powerButton(ServiceHover):
 
     def __init__(self):
+        self.label = Widget.Label(
+            label = "uptime: ",
+            css_classes = ['toppanel_font']
+        )
+        fetch_poll = Utils.Poll(timeout=60000, callback=lambda _: self.update_uptime())
 
         super().__init__(
             icon_image='system-shutdown-symbolic',
-            info_child=Widget.Box(),
+            info_child=self.label,
             on_click=lambda _: None
         )
+
+    def update_uptime(self):
+        fetch_uptime = fetch.uptime or (0, 0, 0, 0)
+        self.label.label = f"uptime: {fetch_uptime[0]} days {fetch_uptime[1]}h{fetch_uptime[2]}m{fetch_uptime[3]}s"
         
 
 class Buttons(Widget.Box):

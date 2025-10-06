@@ -57,12 +57,14 @@
 .toppanel_font {
     @include font;
     font-size: 18px;
+    margin-left: 0.65rem;
 }
 
 .toppanel_slider {
     background-color: $primary_off;
     margin-top: 0.65rem;
     margin-bottom: 0.65rem;
+    margin-left: 0.65rem;
     padding: 0rem 0rem;
     min-width: 6rem;
     border-radius: 1.5rem;
