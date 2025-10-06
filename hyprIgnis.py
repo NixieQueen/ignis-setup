@@ -17,6 +17,7 @@
 from ignis import utils as Utils
 from ignis.css_manager import CssManager, CssInfoPath
 from utils.ignisconfig import Config
+from ignis.icon_manager import IconManager
 
 #from ignis.services.applications import ApplicationsService
 #applications = ApplicationsService.get_default()
@@ -41,7 +42,6 @@ css_manager.apply_css(
         compiler_function=lambda compiler_path: Utils.sass_compile(path=compiler_path),
     )
 )
-
 
 #
 # Now it is time to import all our seperate modules and things

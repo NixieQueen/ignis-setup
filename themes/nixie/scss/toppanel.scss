@@ -38,10 +38,10 @@
 }
 
 .toppanel_service {
-    color: $primary;
     @include widgetborder;
     padding: 0rem;
     margin: 0.4rem;
+    box-shadow: 3px 3px 0px 0px $shadow;
 }
 
 .toppanel_button {
@@ -49,6 +49,9 @@
     margin: 0.1rem;
     padding: 0.3rem;
     box-shadow: 0px 0px 0px 0px $transparent;
+    &.disabled {
+        color: $primary_off;
+    }
 }
 
 .toppanel_font {

@@ -36,7 +36,7 @@ class ServiceRevealer(Widget.Revealer):
         super().__init__(
             visible=False,
             child=info_child,
-            transition_type='slide_right',
+            transition_type='slide_left',
             transition_duration=500,
             reveal_child=True
         )
@@ -70,11 +70,11 @@ class ServiceHover(Widget.EventBox):
     def __init__(self, icon_image, info_child, on_click):
         icon = Widget.Icon(image=icon_image, pixel_size=26)
 
-        service_button = ServiceButton(child=icon, on_click=on_click)
+        self.service_button = ServiceButton(child=icon, on_click=on_click)
         service_revealer = ServiceRevealer(info_child)
         
         super().__init__(
-            child=[service_button, service_revealer],
+            child=[service_revealer, self.service_button],
             spacing=6,
             css_classes=['toppanel_service'],
             on_hover=lambda _: service_revealer.change_visible(True),
@@ -205,12 +205,25 @@ class NetworkButton(ServiceHover):
 
 class BluetoothButton(ServiceHover):
 
-    def __init__(self):
+    def __init__(self, bluetoothdevice):
         # Icons:
         # bluetooth-active-symbolic
         # bluetooth-disabled-symbolic
-        pass
-  
+
+        label = Widget.Label(
+            css_classes=['toppanel_font'],
+            label=bluetoothdevice.bind('name')
+        )
+        
+        super().__init__(
+            icon_image=bluetoothdevice.bind('icon_image'),
+            info_child=label,
+            on_click=lambda _: self.toggle_bluetooth()
+        )
+
+    def toggle_bluetooth(self):
+        Bluetooth.powered = not Bluetooth.powered
+        
 
 class Services(Widget.Box):
 
@@ -227,9 +240,10 @@ class Services(Widget.Box):
             )
 
         if Bluetooth.state != 'absent':
-            pass
             # Add bluetooth if it is present
-            #child.append('')
+            service_child.append(
+                BluetoothButton(Bluetooth.devices[0])
+            )
 
         if Network.wifi.devices or Network.ethernet.devices:
             service_child.append(
@@ -238,5 +252,6 @@ class Services(Widget.Box):
             # Add network if it is present
         
         super().__init__(
-            child=service_child
+            child=service_child,
+            css_classes=['toppanel_workspace']
         )

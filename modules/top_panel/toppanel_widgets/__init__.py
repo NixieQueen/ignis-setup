@@ -11,5 +11,6 @@
 from .workspaces import Workspace
 from .clock import Clock
 from .services import Services
+from .buttons import Buttons
 
-__all__ = ["Workspace", "Clock", "Services"]
+__all__ = ["Workspace", "Clock", "Services", "Buttons"]

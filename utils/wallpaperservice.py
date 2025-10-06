@@ -37,6 +37,7 @@ class WallPaper:
         self.wallpapers = self.get_wallpapers()
 
     def update_wallpaper(self):  # This is a function that is periodically called (once per hour or once per day)
+        self.time_data = get_time_data()
         season = self.month_to_prefix()
         weather = self.weather_to_middix()
         daytime = self.hour_to_suffix()
@@ -58,11 +59,8 @@ class WallPaper:
         return wallpapers
 
     def set_wallpaper(self, wallpaper):
-        print(wallpaper)
         if self.current_wallpaper == wallpaper:
             return
-        print("success!")
-        print(wallpaper)
 
         full_wallpaper_path = f"{self.wallpaper_path}/{wallpaper}"
 
