@@ -42,17 +42,18 @@ class ServiceRevealer(Widget.Revealer):
         )
         self.set_reveal_child(False)
 
-    def change_visible(self, visible):
-        if visible:
-            self.visible = visible
-            self.set_reveal_child(visible)
-            return
+    @Utils.debounce(400)
+    def show_revealer(self):      
+        self.visible = True
+        self.set_reveal_child(True)
        
+    @Utils.debounce(1000)
+    def hide_revealer(self):
         Utils.Timeout(
-            ms=self.transition_duration//2,
-            target=lambda self=self: self.set_visible(visible)
+            ms=self.transition_duration,
+            target=lambda self=self: self.set_visible(False)
         )
-        self.set_reveal_child(visible)
+        self.set_reveal_child(False) 
 
 
 class ServiceButton(Widget.Button):
@@ -77,8 +78,8 @@ class ServiceHover(Widget.EventBox):
             child=[service_revealer, self.service_button],
             spacing=6,
             css_classes=['toppanel_service'],
-            on_hover=lambda _: service_revealer.change_visible(True),
-            on_hover_lost=lambda _: service_revealer.change_visible(False)
+            on_hover=lambda _: service_revealer.show_revealer(),
+            on_hover_lost=lambda _: service_revealer.hide_revealer()
         )
 
 

@@ -9,11 +9,17 @@
 #                                  ╚══╝ ╚╝              ╚══╝                               ╚╝
 #
 from ignis import utils as Utils
-from ignis.services.hyprland import HyprlandService
 
 import os
 from datetime import datetime
-hyprland = HyprlandService.get_default()
+
+import asyncio
+
+#from ignis.services.hyprland import HyprlandService
+from ignis.services.niri import NiriService
+#hyprland = HyprlandService.get_default()
+niri = NiriService.get_default()
+way_wm = niri
 
 
 def get_time_data():
@@ -64,7 +70,10 @@ class WallPaper:
 
         full_wallpaper_path = f"{self.wallpaper_path}/{wallpaper}"
 
-        hyprland.send_command(f"dispatcher exec swww img {full_wallpaper_path} -t grow")
+
+        #way_wm.send_command(f"dispatcher exec swww img {full_wallpaper_path} -t grow")
+        #way_wm.send_command(f"action spawn-sh -- 'swww img {full_wallpaper_path} -t grow'")
+        asyncio.create_task(Utils.exec_sh_async(f"swww img {full_wallpaper_path} -t grow"))
         self.current_wallpaper = wallpaper
 
     def hour_to_suffix(self):

@@ -10,13 +10,38 @@
 #
 from ignis import widgets as Widget
 from ignis.window_manager import WindowManager
+from ignis.command_manager import CommandManager
 from utils.desktopfiles import DesktopApps
 from ignis import utils as Utils
+from utils.screennametoid import ScreennameToId
+
+screenname = ScreennameToId.get_default()
 
 from .applauncher_widgets import AppGrid
 
-
+from ignis.services.niri import NiriService
+way_wm = NiriService.get_default()
 window_manager = WindowManager.get_default()
+commandmanager = CommandManager.get_default()
+
+applaunchers = []
+
+
+@commandmanager.command(name="launch-applauncher")
+def launch_applauncher(monitor="-1", *_):
+    if not monitor.lstrip("-").isnumeric():
+        return
+    monitor = int(monitor)
+    
+    if monitor < 0:
+        monitor = screenname.name_to_id(way_wm.active_output)
+        #monitor = way_wm.active_workspace.monitor_id
+
+
+    if len(applaunchers)-1 < monitor:
+        return
+
+    applaunchers[monitor].visible = True
 
 
 class applauncher(Widget.RevealerWindow):
@@ -78,6 +103,7 @@ class applauncher(Widget.RevealerWindow):
                 ]
             )
         )
+        applaunchers.append(self)
 
     def applauncher_open(self):
         if not self.visible:

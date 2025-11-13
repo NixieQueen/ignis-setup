@@ -19,6 +19,6 @@ dwall_weather: False
 
 ## Taskbars
 # Taskbar position, either standard, floating or unity
-taskbar_position: standard
+taskbar_position: unity
 # Taskbar anchor, either linux or windows. 'Linux' is ignored when taskbar_position is set to unity
 taskbar_anchor: windows

@@ -18,16 +18,24 @@ import asyncio
 from .services import ServiceHover
 from ignis import widgets as Widget
 from ignis.services.systemd import SystemdService
-from ignis.services.hyprland import HyprlandService
+from ignis.services.niri import NiriService
 from ignis.services.fetch import FetchService
+from ignis.command_manager import CommandManager
 from ignis import utils as Utils
 
 
 fetch = FetchService.get_default()
-hyprland = HyprlandService.get_default()
+niri = NiriService.get_default()
+way_wm = niri
 systemd_session = SystemdService.get_default()
 hypridle_unit = systemd_session.get_unit('hypridle.service')
+commandmanager = CommandManager.get_default()
 gamemode_buttons = []
+
+
+@commandmanager.command(name="toggle-gamemode")
+def toggle_gamemode(*_) -> None:
+    gamemode_buttons[0].gaming_button.toggle_gamemode()
 
 
 class hyprIdleButton(ServiceHover):
@@ -63,7 +71,7 @@ class gamingButton(ServiceHover):
         self.gamemode = False
 
         self.label = Widget.Label(
-            label = 'Gamemode is disabled',
+            label = 'Not gaming 3:',
             css_classes = ['toppanel_font']
         )
         
@@ -80,7 +88,7 @@ class gamingButton(ServiceHover):
             gaming_button = button.gaming_button  # Works because it requires itself to be always present
             gaming_button.gamemode = self.gamemode
             gaming_button.service_button.css_classes = ['toppanel_button'] if self.gamemode else ['toppanel_button', 'disabled']
-            gaming_button.label.label = "Gamemode is enabled" if self.gamemode else "Gamemode is disabled"
+            gaming_button.label.label = "Gaming! :3" if self.gamemode else "Not gaming 3:"
 
         performance_toggle = 'false' if self.gamemode else 'true'
         asyncio.create_task(Utils.exec_sh_async(
@@ -115,7 +123,7 @@ class Buttons(Widget.Box):
         # This should be changed to allow Niri to occupy a similar role
         self.gaming_button = gamingButton()  # Pre init to access later
         service_child = [
-            hyprIdleButton() if hyprland else None,
+            hyprIdleButton() if niri.is_available else None,
             self.gaming_button,
             powerButton()
         ]

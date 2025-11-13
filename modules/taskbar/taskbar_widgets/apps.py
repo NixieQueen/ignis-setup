@@ -12,11 +12,13 @@ from ignis import widgets as Widget
 from ignis.menu_model import IgnisMenuModel, IgnisMenuItem
 from ignis import utils as Utils
 from ignis.window_manager import WindowManager
-from ignis.services.hyprland import HyprlandService
+#from ignis.services.hyprland import HyprlandService
+from ignis.services.niri import NiriService
 from utils.desktopicons import App
 
 
-hyprland = HyprlandService.get_default()
+#hyprland = HyprlandService.get_default()
+way_wm = NiriService.get_default()
 window_manager = WindowManager.get_default()
 
 class PinnedAppsHandler:
@@ -78,11 +80,11 @@ class PinnedAppsHandler:
 class ActiveAppBox(Widget.Box):
 
     def __init__(self, current_address: str, app_address: str, address_size: int):
-        padding_width = 1.8 / float(address_size) - 0.05 * (float(address_size) - 1)
+        padding_width = 1.7 / float(address_size) - 0.05 * (float(address_size) - 1)
         if padding_width < 0.2:
             padding_width = 0.2
         super().__init__(
-            css_classes=["taskbar_apps_separators", "unset"],
+            css_classes=["taskbar_apps_separators"],
             halign="start",
             valign="center",
             style=f"padding: 0.3rem {padding_width}rem;"
@@ -105,10 +107,11 @@ class AppButton(Widget.Button):
         if app.addresses:
             separator_box = Widget.CenterBox(
                 center_widget=Widget.Box(
-                    child=hyprland.bind(
+                    spacing=3,
+                    child=way_wm.bind(
                         "active_window",
                         transform=lambda client: [
-                            ActiveAppBox(client.address, address, len(app.addresses)) for address in app.addresses
+                            ActiveAppBox(client.id, address, len(app.addresses)) for address in app.addresses
                         ],
                     )
                 )
@@ -122,7 +125,7 @@ class AppButton(Widget.Button):
                 child=Widget.Box(child=[icon_box, menu]),
                 on_click=lambda _: app.focus(),
                 on_right_click=lambda _: menu.popup(),
-                css_classes=["taskbar_apps", "unset"],
+                css_classes=["taskbar_apps"],
             )
         else:
             super().__init__(
@@ -162,15 +165,15 @@ class PinnedApps(Widget.Box):
         self.app_list = []
         super().__init__(
             vertical = True if config.config['taskbar_position'] == 'unity' else False,
-            child=hyprland.bind(
+            child=way_wm.bind(
                 "windows",
                 transform=lambda windows: self.generate_pinnedapp_list(windows)
             )
         )
 
     def generate_pinnedapp_list(self, windows):
-        hyprland_window_classnames = [window.class_name for window in windows]
-        pinned_app_list = [pinned_app for pinned_app in self.pinned_apps.pinned_apps if pinned_app.class_name not in hyprland_window_classnames]
+        way_wm_window_classnames = [window.app_id for window in windows]
+        pinned_app_list = [pinned_app for pinned_app in self.pinned_apps.pinned_apps if pinned_app.class_name not in way_wm_window_classnames]
         old_app_list = self.app_list.copy()
         self.app_list = []
 
@@ -185,7 +188,7 @@ class PinnedApps(Widget.Box):
                         class_name=pinned_app.class_name,
                         theme=self.config.config['theme'],
                         pinned_apps=self.pinned_apps,
-                        icon_path=pinned_app.icon_path
+                        icon_path=pinned_app.icon_path                    
                     )
                 )
             self.app_list.append(app) 
@@ -196,6 +199,7 @@ class PinnedApps(Widget.Box):
 
 
 class ActiveApps(Widget.Box):
+
     def __init__(self, pinned_apps, config, desktopfiles):
         self.config = config
         self.desktopfiles = desktopfiles
@@ -203,7 +207,7 @@ class ActiveApps(Widget.Box):
         self.app_list = []
         super().__init__(
             vertical = True if config.config['taskbar_position'] == 'unity' else False,
-            child=hyprland.bind(
+            child=way_wm.bind(
                 "windows",
                 transform=lambda windows: self.generate_app_list(windows)
             )
@@ -232,7 +236,8 @@ class ActiveApps(Widget.Box):
                         theme=self.config.config['theme'],
                         pinned_apps=self.pinned_apps,
                         addresses=active_windows[w_class],
-                        desktopfiles=self.desktopfiles
+                        desktopfiles=self.desktopfiles,
+                        icon_size=46
                     )
                 )
             )
@@ -245,12 +250,12 @@ class ActiveApps(Widget.Box):
         # Make this function return a dictionary of all active apps sorted by class_name
         active_windows = {}
         for w in windows:
-            class_name = w.class_name or w.title
+            class_name = w.app_id or w.title
 
             if not class_name in active_windows:
                 active_windows[class_name] = []
 
-            active_windows[class_name].append(w.address)
+            active_windows[class_name].append(w.id)
 
         return active_windows
 

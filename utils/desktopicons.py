@@ -13,9 +13,14 @@ from utils.desktopfiles import DesktopApps
 from utils.desktopfiles import get_icon_path
 from ignis import utils as Utils
 from ignis import widgets as Widget
+import asyncio
 
-from ignis.services.hyprland import HyprlandService
-hyprland = HyprlandService.get_default()
+#from ignis.services.hyprland import HyprlandService
+from ignis.services.niri import NiriService
+#hyprland = HyprlandService.get_default()
+niri = NiriService.get_default()
+way_wm = niri
+
 
 # class containing basic data for an app icon
 class App:
@@ -47,21 +52,29 @@ class App:
         self.icon = Widget.Icon(image=icon_path, pixel_size=icon_size)
 
     def launch(self):
-        hyprland.send_command(f"dispatch exec {self.exec_cmd}")
+        #way_wm.send_command(f"dispatch exec {self.exec_cmd}")
+        #way_wm.send_command(f'action spawn-sh -- "{self.exec_cmd}"')
+        asyncio.create_task(Utils.exec_sh_async(f"{self.exec_cmd}"))
 
     def focus(self):
         if not self.addresses:
             return
 
         self.address_index = 0
-        if hyprland.active_window.address in self.addresses:
-            self.address_index = self.addresses.index(hyprland.active_window.address)
+        #way_wm.active_window.address
+        address = way_wm.active_window.id
+        if address in self.addresses:
+            self.address_index = self.addresses.index(address)
             self.address_index = (self.address_index + 1) % len(self.addresses)  # Looping focus
 
-        hyprland.send_command(f"dispatch focuswindow address:{self.addresses[self.address_index]}")
+        #way_wm.send_command(f"dispatch focuswindow address:{self.addresses[self.address_index]}")
+        #way_wm.send_command(f"action focus-window --id {self.addresses[self.address_index]}")
+        asyncio.create_task(Utils.exec_sh_async(f"niri msg action focus-window --id {self.addresses[self.address_index]}"))
 
     def close(self):
-        hyprland.send_command(f"dispatch closewindow address:{self.addresses[self.address_index]}")
+        #way_wm.send_command(f"dispatch closewindow address:{self.addresses[self.address_index]}")
+        #way_wm.send_command(f"action close-window --id {self.addresses[self.address_index]}")
+        asyncio.create_task(Utils.exec_sh_async(f"niri msg action close-window --id {self.addresses[self.address_index]}"))
 
     def pin(self):
         if not self.pinned_apps:

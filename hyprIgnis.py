@@ -19,6 +19,8 @@ from ignis.css_manager import CssManager, CssInfoPath
 from utils.ignisconfig import Config
 from ignis.icon_manager import IconManager
 
+from utils.screennametoid import ScreennameToId
+screennames = ScreennameToId.get_default()
 #from ignis.services.applications import ApplicationsService
 #applications = ApplicationsService.get_default()
 #print(len(applications.apps))

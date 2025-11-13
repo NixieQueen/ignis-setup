@@ -8,25 +8,53 @@
 #                                  ╔═╝║ ║║              ╔═╝║                               ║║
 #                                  ╚══╝ ╚╝              ╚══╝                               ╚╝
 #
-from ignis import widgets as Widget
-from .toppanel_widgets import (
-    Workspace,
-    Clock,
-    Services,
-    Buttons
-)
+#
+# Simple class holding names of all monitors and allows conversion to id
+#
+from typing import TypeVar
+from ignis import utils as Utils
 
-def toppanel_creator(monitor_id: int=0) -> Widget.Window:
-    return Widget.Window(
-        namespace=f"ignis_top_panel_{monitor_id}",
-        monitor=monitor_id,
-        anchor=["left", "top", "right"],
-        exclusivity="exclusive",
-        #layer = "overlay",
-        child=Widget.CenterBox(
-            css_classes=["toppanel"],
-            start_widget=Widget.Box(child=[Workspace(monitor_id)]),
-            center_widget=Widget.Box(child=[Clock()]),
-            end_widget=Widget.Box(child=[Services(), Buttons()]),
-        ),
-    )
+
+_screenname = TypeVar("_screenname", bound="ScreennameToId")
+
+
+class ScreennameToId:
+
+    _instance: _screenname | None = None
+
+    def __init__(self):
+        self.screennames_ids = dict()
+        self.screennames_names = dict()
+        monitors = Utils.exec_sh('niri msg outputs | grep Output | cut -d"(" -f2').stdout
+        for monitor in monitors.split("\n"):
+            if not monitor:
+                continue
+            
+            self.add_screen(monitor.rstrip(")"))
+
+    def add_screen(self, name) -> None:
+        keys = self.screennames_ids.keys()
+        if name in keys:
+            return
+
+        id_screen = len(keys)
+        self.screennames_ids[name] = id_screen
+        self.screennames_names[id_screen] = name
+
+    @classmethod
+    def get_default(cls: type[_screenname]) -> _screenname:
+        if cls._instance is None:
+            cls._instance = cls()
+        return cls._instance
+
+    def name_to_id(self, name) -> int:
+        if not name in self.screennames_ids.keys():
+            name = 0
+
+        return self.screennames_ids[name]
+
+    def id_to_name(self, id):
+        if not id in self.screennames_names.keys():
+            id = 0
+
+        return self.screennames_names[id]
