@@ -28,7 +28,6 @@ fetch = FetchService.get_default()
 niri = NiriService.get_default()
 way_wm = niri
 systemd_session = SystemdService.get_default()
-hypridle_unit = systemd_session.get_unit('hypridle.service')
 commandmanager = CommandManager.get_default()
 gamemode_buttons = []
 
@@ -41,8 +40,9 @@ def toggle_gamemode(*_) -> None:
 class hyprIdleButton(ServiceHover):
 
     def __init__(self):
+        self.hypridle_unit = systemd_session.get_unit('hypridle.service')
         self.label = Widget.Label(
-            label = hypridle_unit.bind('is_active', lambda x: 'Ready to sleep...' if x else "I'm awake!"),
+            label = self.hypridle_unit.bind('is_active', lambda x: 'Ready to sleep...' if x else "I'm awake!"),
             css_classes = ['toppanel_font']
         )
      
@@ -51,18 +51,47 @@ class hyprIdleButton(ServiceHover):
             info_child=self.label,
             on_click=lambda _: self.toggle_hypridle()
         )
-        self.service_button.css_classes = hypridle_unit.bind(
+        self.service_button.css_classes = self.hypridle_unit.bind(
             'is_active',
             lambda x:
                 ['toppanel_button'] if x else ['toppanel_button', 'disabled']
         )
 
     def toggle_hypridle(self):
-        if hypridle_unit.is_active:
-            asyncio.create_task(hypridle_unit.stop_async())
+        if self.hypridle_unit.is_active:
+            asyncio.create_task(self.hypridle_unit.stop_async())
             return
 
-        asyncio.create_task(hypridle_unit.start_async())
+        asyncio.create_task(self.hypridle_unit.start_async())
+        
+        
+class niriIdleButton(ServiceHover):
+
+    def __init__(self):
+        self.swayidle_unit = systemd_session.get_unit('swayidle.service')
+        
+        self.label = Widget.Label(
+            label = self.swayidle_unit.bind('is_active', lambda x: f'Ready to sleep...' if x else "I'm awake!"),
+            css_classes = ['toppanel_font']
+        )
+     
+        super().__init__(
+            icon_image='gnome-disks-state-standby-symbolic',
+            info_child=self.label,
+            on_click=lambda _: self.toggle_hypridle()
+        )
+        self.service_button.css_classes = self.swayidle_unit.bind(
+            'is_active',
+            lambda x:
+                ['toppanel_button'] if x else ['toppanel_button', 'disabled']
+        )
+
+    def toggle_hypridle(self):
+        if self.swayidle_unit.is_active:
+            asyncio.create_task(self.swayidle_unit.stop_async())
+            return
+
+        asyncio.create_task(self.swayidle_unit.start_async())
         
         
 class gamingButton(ServiceHover):
@@ -123,7 +152,7 @@ class Buttons(Widget.Box):
         # This should be changed to allow Niri to occupy a similar role
         self.gaming_button = gamingButton()  # Pre init to access later
         service_child = [
-            hyprIdleButton() if niri.is_available else None,
+            niriIdleButton() if niri.is_available else hyprIdleButton(),
             self.gaming_button,
             powerButton()
         ]
