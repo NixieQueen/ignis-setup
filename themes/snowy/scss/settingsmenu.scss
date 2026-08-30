@@ -1,0 +1,134 @@
+* {
+    all: unset;
+}
+
+.settingsmenu {
+    background: $bg;
+    .content {
+        .page {
+            padding: 0.1rem 3rem 3rem 3rem;
+            //min-height: 80rem;
+            .pageheader {
+                padding-left: 1.5rem;
+                padding-top: 1rem;
+                @include font(bold, 48px);
+            }
+            .entry {
+                padding-top: 0.1rem;
+                //padding-bottom: 1rem;
+                .pagetext {
+                    @include font(normal, 26px);
+                }
+                .pagesubheader {
+                    @include font(bold, 30px);
+                }
+                .pagedivider {
+                    //padding-left: 10rem;
+                    //padding-right: 10rem;
+                }
+                .button {
+                    @include button($quinary);
+                    @include font(bold, 20px);
+                    padding-left: 1.5rem;
+                    padding-right: 1.5rem;
+                    margin-right: 1.5rem;
+                    &.disabled {
+                        background-color: $bg;
+                    }
+                }
+                .switch {
+                    @include button($quinary);
+                    padding: 0.5rem;
+                    margin: 0rem;
+                }
+                .inputbox {                           
+                    @include font(bold, 20px);
+                    @include button;
+                    background-color: $quaternary_off;
+                    padding: 0.5rem;
+                    margin-left: 0.6rem;
+                    margin-right: 0.6rem;
+                    //margin: 0.5rem;
+                }
+                .dropdown {
+                    @include button;
+                    @include font(bold, 20px);
+                    background-color: $quaternary_off;
+                    popover {
+                        margin: 0.5rem;
+                        //margin-left: 0.6rem;
+                        padding: 0.5rem;
+                        border-radius: 2rem;
+                        //background-color: rgba(from $quaternary_off r g b / 0.9);
+                        background-color: $quaternary_off;
+                    }
+                }
+                .slider {
+                    @include font(bold, 20px);
+                    @include button;
+                    background-color: $quaternary_off;
+                    min-width: 15rem;
+                    //margin-top: 1rem;
+                    //margin-bottom: 1rem;
+                    padding: 0.5rem;
+                    border-radius: 2rem;
+                    transition: 0.2s;
+                    
+                    trough slider {
+                        background-color: $primary;
+                        padding: 1rem;
+                        //padding-left: 1.2rem;
+                        //padding-right: 1.2rem;
+                        //margin: 0.1rem;
+                        box-shadow: 0px 0px 0px 0px $shadow;
+                        border-radius: 2rem;
+                        //background-color: $primary;
+                        //min-height: 2rem;
+                        //min-width: 2rem;
+                    }
+                    trough highlight {
+                        background-color: $primary;
+                        margin: 0.3rem;
+                        padding: 0.3rem;
+                        border-radius: 2rem 0rem 0rem 2rem;
+                    }
+                }
+            }
+            .apply_button_container {
+                margin-top: 2rem;
+                background-color: $primary_off;
+                border-radius: 2rem;
+                padding-bottom: 0.3rem;
+                .apply_button {
+                    @include button($quinary);
+                    @include font(bold, 20px);
+                    padding-left: 1.5rem;
+                    padding-right: 1.5rem;
+                    margin-right: 1.5rem;
+                }
+            }
+        }
+    }
+    
+    .navigator {
+        background: $bg_off;
+        border-radius: 0rem 1.5rem 0rem 0rem;
+        .navigatorentry {
+            @include hover($secondary, $transparent);
+            margin-left: 1rem;
+            border-radius: 1.5rem 0rem 0rem 1.5rem;
+            .button {
+                @include button($quinary);
+                padding: 0.6rem;
+            }
+        }
+    }
+    
+    .topbar {
+        background: $bg;
+        .close_button {
+            @include button($quinary);
+            padding: 0.1rem;
+        }
+    }
+}

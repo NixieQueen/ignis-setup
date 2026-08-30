@@ -12,8 +12,7 @@ from ignis import widgets as Widget
 from .toppanel_widgets import (
     Workspace,
     Clock,
-    Services,
-    Buttons
+    Services
 )
 
 def toppanel_creator(monitor_id: int=0) -> Widget.Window:
@@ -27,6 +26,6 @@ def toppanel_creator(monitor_id: int=0) -> Widget.Window:
             css_classes=["toppanel"],
             start_widget=Widget.Box(child=[Workspace(monitor_id)]),
             center_widget=Widget.Box(child=[Clock()]),
-            end_widget=Widget.Box(child=[Services(), Buttons()]),
+            end_widget=Widget.Box(child=[Services(monitor_id)]),
         ),
     )

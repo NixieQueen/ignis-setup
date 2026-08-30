@@ -46,7 +46,7 @@ class App:
 
                     if not icon_path:  # This might be excessively expensive, reevaluate
                         xdg_data_dirs = list(desktopfiles.xdg_data_dirs.keys())
-                        icon_path = get_icon_path(class_name.lower(), self.theme, xdg_data_dirs[0], xdg_data_dirs)
+                        icon_path = get_icon_path(class_name.lower(), self.theme, desktopfiles.home_dir, xdg_data_dirs[0], xdg_data_dirs)
 
         self.icon_path = icon_path
         self.icon = Widget.Icon(image=icon_path, pixel_size=icon_size)
@@ -54,7 +54,7 @@ class App:
     def launch(self):
         #way_wm.send_command(f"dispatch exec {self.exec_cmd}")
         #way_wm.send_command(f'action spawn-sh -- "{self.exec_cmd}"')
-        asyncio.create_task(Utils.exec_sh_async(f"{self.exec_cmd}"))
+        asyncio.create_task(Utils.exec_sh_async(f"niri msg action spawn-sh -- '{self.exec_cmd}'"))
 
     def focus(self):
         if not self.addresses:
@@ -68,6 +68,7 @@ class App:
             self.address_index = (self.address_index + 1) % len(self.addresses)  # Looping focus
 
         #way_wm.send_command(f"dispatch focuswindow address:{self.addresses[self.address_index]}")
+        #
         #way_wm.send_command(f"action focus-window --id {self.addresses[self.address_index]}")
         asyncio.create_task(Utils.exec_sh_async(f"niri msg action focus-window --id {self.addresses[self.address_index]}"))
 

@@ -13,7 +13,7 @@
 #
 
 # Unit conversion "true" -> True & 1 -> "1"... etc
-def unit_conversion(unit, to_string=False):
+def unit_conversion(unit, to_string: bool=False):
     if to_string:
         return str(unit)
 
@@ -36,42 +36,45 @@ class Config:
 
     def __init__(self, path):
         self.config = dict()
-        self.configName = f"{path}/utils/config"
-
-        self.full_config = list()
-
+        self._config_name = f"{path}/utils/config"
+        self._config_template = f"{self._config_name}.template"
+        
         self.read_config()
 
-    def filter_config_line(self, line):
+    def filter_config_line(self, line: str):
         # Ignore all blank spaces and comments
         if line == '' or line[0] == '#':
             return
 
-        line = line.split(': ')
-        self.config[line[0]] = unit_conversion(line[1])
+        splitline = line.split(': ')
+        self.config[splitline[0]] = unit_conversion(splitline[1])
+
+    def assign_value(self, index: str, value: str):
+        if not index or not value:
+            return
+        self.config[index] = value
 
     def read_config(self):  # Take *every* line as it is, no filters
-        self.full_config = list()
-        with open(self.configName) as configFile:
+        with open(self._config_name) as configFile:
             for line in configFile:
                 line = line.rstrip('\n')
-                self.full_config.append(line)
                 self.filter_config_line(line)
 
     def write_config(self):
-        if not self.config or not self.full_config:
-            self.read_config()
+        if not self.config:
+            return
 
-        with open(self.configName, "w") as configFile:
-            configFile.write('')
+        with open(self._config_name, "w") as config_file:
+            config_file.write('')
 
-        with open(self.configName, "a") as configFile:
-            for line in self.full_config:
-                # Find config entries and change if needed
+        config_file = open(self._config_name, "a")
+        with open(self._config_template, "r") as template:
+            for line in template:               
+                if line == '\n' or line[0] == '#':
+                    config_file.write(line)
+                    continue
+
                 config_entry = line.split(": ")[0]
                 if config_entry in self.config.keys():
-                    if not line.split(": ")[1] == self.config[config_entry]:
-                        line = f"{config_entry}: {self.config[config_entry]}"
-
-
-                configFile.write(f"{line}\n")
+                    config_file.write(f"{config_entry}: {self.config[config_entry]}\n")
+        config_file.close()

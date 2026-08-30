@@ -22,65 +22,19 @@ from ignis.services.audio import AudioService
 from ignis.services.upower import UPowerService
 from ignis.services.network import NetworkService
 from ignis.services.bluetooth import BluetoothService
+from ignis.services.fetch import FetchService
+from extra_widgets.servicebutton import ServiceHover
 from ignis import utils as Utils
+from ignis.window_manager import WindowManager
+
 
 Audio = AudioService.get_default()
 Power = UPowerService.get_default()
 Network = NetworkService.get_default()
 Bluetooth = BluetoothService.get_default()
 
-
-class ServiceRevealer(Widget.Revealer):
-
-    def __init__(self, info_child):
-        super().__init__(
-            visible=False,
-            child=info_child,
-            transition_type='slide_left',
-            transition_duration=500,
-            reveal_child=True
-        )
-        self.set_reveal_child(False)
-
-    @Utils.debounce(400)
-    def show_revealer(self):      
-        self.visible = True
-        self.set_reveal_child(True)
-       
-    @Utils.debounce(1000)
-    def hide_revealer(self):
-        Utils.Timeout(
-            ms=self.transition_duration,
-            target=lambda self=self: self.set_visible(False)
-        )
-        self.set_reveal_child(False) 
-
-
-class ServiceButton(Widget.Button):
-
-    def __init__(self, child, on_click):
-        super().__init__(
-            child=child or [],
-            on_click=on_click,
-            css_classes=['toppanel_button']
-        )
-        
-
-class ServiceHover(Widget.EventBox):
-
-    def __init__(self, icon_image, info_child, on_click):
-        icon = Widget.Icon(image=icon_image, pixel_size=26)
-
-        self.service_button = ServiceButton(child=icon, on_click=on_click)
-        service_revealer = ServiceRevealer(info_child)
-        
-        super().__init__(
-            child=[service_revealer, self.service_button],
-            spacing=6,
-            css_classes=['toppanel_service'],
-            on_hover=lambda _: service_revealer.show_revealer(),
-            on_hover_lost=lambda _: service_revealer.hide_revealer()
-        )
+fetch = FetchService.get_default()
+window_manager = WindowManager.get_default()
 
 
 class AudioButton(ServiceHover):
@@ -143,7 +97,7 @@ class PowerButton(ServiceHover):
         )
         label = Widget.Label(
             css_classes=['toppanel_font'],
-            label=powerdevice.bind('time_remaining', lambda x: str(datetime.timedelta(seconds=x)))
+            label=powerdevice.bind('time_remaining', lambda x: str(datetime.timedelta(seconds=x) if x else "???"))
         )
 
         super().__init__(
@@ -206,19 +160,19 @@ class NetworkButton(ServiceHover):
 
 class BluetoothButton(ServiceHover):
 
-    def __init__(self, bluetoothdevice):
+    def __init__(self):
         # Icons:
         # bluetooth-active-symbolic
         # bluetooth-disabled-symbolic
 
-        label = Widget.Label(
+        self.label = Widget.Label(
             css_classes=['toppanel_font'],
-            label=bluetoothdevice.bind('name')
+            label=Bluetooth.bind('connected_devices', lambda x: f"Connections: {len(x)}")
         )
         
         super().__init__(
-            icon_image=bluetoothdevice.bind('icon_image'),
-            info_child=label,
+            icon_image=Bluetooth.bind('powered', lambda power: 'bluetooth-active-symbolic' if power else 'bluetooth-disabled-symbolic'),
+            info_child=self.label,
             on_click=lambda _: self.toggle_bluetooth()
         )
 
@@ -226,9 +180,44 @@ class BluetoothButton(ServiceHover):
         Bluetooth.powered = not Bluetooth.powered
         
 
-class Services(Widget.Box):
+class sideButton(ServiceHover):
+
+    def __init__(self, monitor_id: int):
+        self.label = Widget.Label(
+            label = "Uptime: ",
+            css_classes = ['toppanel_font']
+        )
+        fetch_poll = Utils.Poll(timeout=60000, callback=lambda _: self.update_uptime())
+
+        super().__init__(
+            icon_image='view-list-symbolic',
+            info_child=self.label,
+            on_click=lambda _: window_manager.open_window(f"ignis_sidepanel_{monitor_id}")
+        )
+
+    def update_uptime(self):
+        fetch_uptime = fetch.uptime or (0, 0, 0, 0)
+        self.label.label = f"Uptime: {fetch_uptime[0]} days {fetch_uptime[1]}h{fetch_uptime[2]}m{fetch_uptime[3]}s"
+
+        
+class settingsButton(ServiceHover):
 
     def __init__(self):
+        self.label = Widget.Label(
+            label = "Settings",
+            css_classes = ['toppanel_font']
+        )
+
+        super().__init__(
+            icon_image='emblem-system-symbolic',
+            info_child=self.label,
+            on_click=lambda _: window_manager.open_window(f"ignis_settingsmenu")
+        )
+
+      
+class Services(Widget.Box):
+
+    def __init__(self, monitor_id: int=0):
         # Add audio and power services
         service_child = [
             AudioButton(speaker=True),
@@ -240,10 +229,11 @@ class Services(Widget.Box):
                 PowerButton(powerdevice=Power.devices[0])
             )
 
+        
         if Bluetooth.state != 'absent':
             # Add bluetooth if it is present
             service_child.append(
-                BluetoothButton(Bluetooth.devices[0])
+                BluetoothButton()
             )
 
         if Network.wifi.devices or Network.ethernet.devices:
@@ -252,6 +242,9 @@ class Services(Widget.Box):
             )
             # Add network if it is present
         
+        service_child.append(settingsButton())
+        service_child.append(sideButton(monitor_id))
+               
         super().__init__(
             child=service_child,
             css_classes=['toppanel_workspace']

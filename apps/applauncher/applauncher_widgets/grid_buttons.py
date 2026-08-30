@@ -9,9 +9,10 @@
 #                                  ╚══╝ ╚╝              ╚══╝                               ╚╝
 #
 from ignis import widgets as Widget
+import extra_widgets
 
 
-class appGridButton(Widget.Button):
+class appGridButton(extra_widgets.Button):
 
     def __init__(self, button_index, appgrid):
         super().__init__(

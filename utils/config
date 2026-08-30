@@ -1,11 +1,11 @@
 ### A big configuration file
 # Theme name, should be the same as the folder found under 'themes'
-theme: nixie
+theme: cutesy
 
 
 ## Dynamic wallpaper settings
 # Change wallpaper by hour
-dwall_hour: True
+dwall_hour: False
 # Time to change wallpaper, only applies if above is 'True'
 dwall_hour_morning: 6
 dwall_hour_afternoon: 12
@@ -19,6 +19,18 @@ dwall_weather: False
 
 ## Taskbars
 # Taskbar position, either standard, floating or unity
-taskbar_position: unity
+taskbar_position: floating
+# Taskbar hiding, only works for floating layout!
+taskbar_hiding: True
 # Taskbar anchor, either linux or windows. 'Linux' is ignored when taskbar_position is set to unity
 taskbar_anchor: windows
+
+
+## Quitmenu
+# timeout timer
+quitmenu_timer: 30
+
+
+## Settings menu
+# Activation
+activation: True

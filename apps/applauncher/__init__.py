@@ -11,9 +11,8 @@
 from ignis import widgets as Widget
 from ignis.window_manager import WindowManager
 from ignis.command_manager import CommandManager
-from utils.desktopfiles import DesktopApps
 from ignis import utils as Utils
-from utils.screennametoid import ScreennameToId
+from services import ScreennameToId
 
 screenname = ScreennameToId.get_default()
 
@@ -46,10 +45,10 @@ def launch_applauncher(monitor="-1", *_):
 
 class applauncher(Widget.RevealerWindow):
 
-    def __init__(self, apps: DesktopApps, monitor_id: int=0):
+    def __init__(self, monitor_id: int=0):
         self.monitor_id = monitor_id
 
-        self.appgrid = AppGrid(apps)
+        self.appgrid = AppGrid()
 
         self.revealer_widget = Widget.Revealer(
             #transition_type="swing_up",
@@ -70,7 +69,8 @@ class applauncher(Widget.RevealerWindow):
             namespace=f"ignis_applauncher_{monitor_id}",
             visible=False,
             monitor=monitor_id,
-            anchor=["top", "left", "bottom", "right"],
+            #anchor=["top", "left", "bottom", "right"],
+            anchor=["left", "bottom"],  # This does not allow click to close!
             exclusivity="normal",  # Ignore may be needed but could overlap with taskbar
             layer="overlay",
             kb_mode="exclusive",

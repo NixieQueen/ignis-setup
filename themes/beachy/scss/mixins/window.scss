@@ -1,0 +1,8 @@
+@mixin window($bgcolor: $bg) {
+    background-color: $bgcolor;
+    border-radius: 2rem;
+    padding: 0.5rem;
+    color: $text;
+    box-shadow: 0px 10px 0px 0px color-mix(in srgb, $shadow 20%, $bgcolor 80%);
+    margin: 0.7rem;
+}
