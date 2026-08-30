@@ -1,0 +1,107 @@
+* {
+    all: unset;
+}
+
+.toppanel {
+    @include window;
+    background: $transparent;
+    margin: 0px;
+    //transition: 5.0s;
+    .clock {
+        @include button;
+        //box-shadow: 0px 0px 0px 0px;
+        padding: 0rem 0.5rem;
+        @include font;
+        margin: 0.2rem;
+    }
+
+    .workspace {
+        //transition: padding $transition_speed;
+        background-color: $quaternary_off;
+        padding: 0rem;
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
+        margin: 0.3rem;
+        box-shadow: 3px 3px 0px 0px $shadow;
+        .button_wrapper {
+            padding-left: 0.45rem;
+            padding-right: 0.45rem;
+            .button {
+                @include hover($primary, $primary_off);
+                border-radius: 2rem;
+                //&.clicked {
+                //    padding: 1rem;
+                //}
+                margin: 0rem;
+                margin-left: 0.0rem;
+                margin-right: 0.0rem;
+                padding: .55rem;
+                //padding-left: 1rem;
+                //padding-right: 1rem;
+                box-shadow: 0px 0px 0px 0px $shadow;
+                //padding: 0.4rem 0.8rem;
+                &.size_hint {
+                    background-color: $quaternary_off;
+                }
+            }
+        }
+        .slider {
+            //padding: 0.7rem;
+            trough slider {
+                background-color: $primary;
+                padding: 1.0rem;
+                //padding-left: 1.2rem;
+                //padding-right: 1.2rem;
+                margin: 0rem;
+                box-shadow: 0px 0px 0px 0px $shadow;
+                border-radius: 2rem;
+                //background-color: $primary;
+                //min-height: 2rem;
+                //min-width: 2rem;
+            }
+        }
+    }
+}
+
+
+
+.toppanel_services_wrapper {
+    margin: 0.4rem;
+}
+
+.toppanel_service {
+    @include widgetborder;
+    padding: 0rem;
+    margin: 0.4rem;
+    box-shadow: 3px 3px 0px 0px $shadow;
+}
+
+.toppanel_button {
+    @include button;
+    margin: 0.1rem;
+    padding: 0.3rem;
+    box-shadow: 0px 0px 0px 0px $transparent;
+}
+
+.toppanel_font {
+    @include font;
+    font-size: 18px;
+    margin-left: 0.65rem;
+}
+
+.toppanel_slider {
+    background-color: $primary_off;
+    margin-top: 0.65rem;
+    margin-bottom: 0.65rem;
+    margin-left: 0.65rem;
+    padding: 0rem 0rem;
+    min-width: 6rem;
+    border-radius: 1.5rem;
+}
+
+.toppanel_slider trough highlight {
+    background-color: $primary;
+    min-height: 1.2rem;
+    min-width: 0rem;
+    border-radius: 1.5rem;
+}

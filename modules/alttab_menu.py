@@ -8,3 +8,6 @@
 #                                  ╔═╝║ ║║              ╔═╝║                               ║║
 #                                  ╚══╝ ╚╝              ╚══╝                               ╚╝
 #
+###
+# Likely not needed as Niri does a good job already
+###

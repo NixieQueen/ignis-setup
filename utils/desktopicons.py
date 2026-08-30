@@ -8,111 +8,83 @@
 #                                  ╔═╝║ ║║              ╔═╝║                               ║║
 #                                  ╚══╝ ╚╝              ╚══╝                               ╚╝
 #
-#
-# A script for finding all applications' desktop files,
-# crafting a list with precompiled data (name, icon location, etc),
-# and also setting up an icon
-#
+from utils.themeicons import get_theme_icon
+from utils.desktopfiles import DesktopApps
+from utils.desktopfiles import get_icon_path
 from ignis import utils as Utils
-import os
-from .themeicons import get_theme_icon
+from ignis import widgets as Widget
+import asyncio
+
+#from ignis.services.hyprland import HyprlandService
+from ignis.services.niri import NiriService
+#hyprland = HyprlandService.get_default()
+niri = NiriService.get_default()
+way_wm = niri
 
 
-# Grab xdg_data_dirs and take only the applications
-def get_xdg_data_dirs():
-    # This is run once on startup to avoid having to wait on a shell command each time
-    xdg_data_dirs = dict()
-    for data_dir in Utils.exec_sh("echo $XDG_DATA_DIRS").stdout.split(":"):
-        data_dir = data_dir.rstrip('\n')
-        applications = []
-        for path, dirs, files in os.walk(data_dir+"/applications"):
-            applications = [app for app in files if app.split(".")[-1] == "desktop"]
-            break
-        if not applications:
-            continue
+# class containing basic data for an app icon
+class App:
+    def __init__(self, class_name: str, theme: None=None, exec_cmd: str="", pinned_apps: None=None, addresses: list=[], desktopfiles: DesktopApps | None=None, icon_path: str="", icon_size: int=50):
+        self.class_name = class_name
+        self.exec_cmd = exec_cmd if exec_cmd else class_name.lower()
+        self.pinned_apps = pinned_apps
+        self.addresses = addresses
+        self.address_index = 0
+        self.icon_size = icon_size
+        self.theme = theme if theme else 'nixie'
 
-        xdg_data_dirs[data_dir] = applications
-    return xdg_data_dirs
+        if not icon_path:
+            icon_path = get_theme_icon(class_name, self.theme)
 
+            if not icon_path:
+                icon_path = Utils.get_app_icon_name(class_name)
 
-class DesktopFile:
+                if not icon_path and desktopfiles:
+                    desktopfile_names = [desktopfile.name.lower() for desktopfile in desktopfiles.desktop_files.value]
+                    if class_name.lower() in desktopfile_names:
+                        icon_path = desktopfiles.desktop_files.value[desktopfile_names.index(class_name.lower())].icon_path
 
-    def __init__(self, name: str, exec_cmd: str, path: str, icon_path: str):
-        self.name = name
-        self.exec_cmd = exec_cmd
-        self.path = path
-
-        # icon_path can either be a path, or more likely, a name similar to the app's name
-        if not "/" in icon_path:
-            icon_path = self.get_icon_path(icon_path)
+                    if not icon_path:  # This might be excessively expensive, reevaluate
+                        xdg_data_dirs = list(desktopfiles.xdg_data_dirs.keys())
+                        icon_path = get_icon_path(class_name.lower(), self.theme, desktopfiles.home_dir, xdg_data_dirs[0], xdg_data_dirs)
 
         self.icon_path = icon_path
+        self.icon = Widget.Icon(image=icon_path, pixel_size=icon_size)
 
-    def get_icon_path(self, icon_name):
-        theme_icon = get_theme_icon(icon_name)
-        if theme_icon:
-            return theme_icon
+    def launch(self):
+        #way_wm.send_command(f"dispatch exec {self.exec_cmd}")
+        #way_wm.send_command(f'action spawn-sh -- "{self.exec_cmd}"')
+        asyncio.create_task(Utils.exec_sh_async(f"niri msg action spawn-sh -- '{self.exec_cmd}'"))
 
-        icon_path = self.path + "/icons"
+    def focus(self):
+        if not self.addresses:
+            return
 
-        present_theme = []
-        for _, _, files in os.walk(icon_path+"/Papirus-Dark"):  # This is weird but required to avoid an error from os.walk
-            present_theme = files
-            break
-        if not present_theme:
-            icon_path = icon_path + "/hicolor"
-        else:
-            icon_path = icon_path + "/Papirus-Dark"
+        self.address_index = 0
+        #way_wm.active_window.address
+        address = way_wm.active_window.id
+        if address in self.addresses:
+            self.address_index = self.addresses.index(address)
+            self.address_index = (self.address_index + 1) % len(self.addresses)  # Looping focus
 
-        valid_icon_sizes = [imgdir for imgdir in next(os.walk(icon_path))[1] if (not "@" in imgdir)]  # Get all possible icon sizes
-        valid_icon_sizes.remove('symbolic')  # Remove a redundant size option
-        valid_icon_sizes = sorted(valid_icon_sizes, key=lambda icon_size: icon_size.split("x")[0], reverse=True)  # Sort from highest quality to lowest
+        #way_wm.send_command(f"dispatch focuswindow address:{self.addresses[self.address_index]}")
+        #
+        #way_wm.send_command(f"action focus-window --id {self.addresses[self.address_index]}")
+        asyncio.create_task(Utils.exec_sh_async(f"niri msg action focus-window --id {self.addresses[self.address_index]}"))
 
-        for icon_size in valid_icon_sizes:
-            prefix = "/apps"
-            if icon_size == "scalable":
-                prefix = ""
+    def close(self):
+        #way_wm.send_command(f"dispatch closewindow address:{self.addresses[self.address_index]}")
+        #way_wm.send_command(f"action close-window --id {self.addresses[self.address_index]}")
+        asyncio.create_task(Utils.exec_sh_async(f"niri msg action close-window --id {self.addresses[self.address_index]}"))
 
-            apps = []
-            for _, _, files in os.walk(f"{icon_path}/{icon_size}{prefix}"):
-                apps = files
-                break
-            if not apps:
-                continue
+    def pin(self):
+        if not self.pinned_apps:
+            return
 
-            apps_names = ['.'.join(app.split(".")[:-1]).lower() for app in apps]
-            if not icon_name.lower() in apps_names:
-                continue
+        self.pinned_apps.add_pinned_app(self.class_name, self.icon_path)
 
-            return f"{icon_path}/{icon_size}{prefix}/{apps[apps_names.index(icon_name.lower())]}"
+    def unpin(self):
+        if not self.pinned_apps:
+            return
 
-        return "image-missing"
-
-
-xdg_data_dirs = get_xdg_data_dirs()
-
-def generate_desktop_files_list():
-    desktop_files = list()
-    for data_dir in xdg_data_dirs:
-        for application in xdg_data_dirs[data_dir]:
-            application_file = dict()
-            with open(f"{data_dir}/applications/{application}") as desktop_file:
-                for line in desktop_file:
-                    if len(application_file) >= 3:
-                        break
-
-                    line = line.split("=")
-                    if not line[0] in ["Name", "Exec", "Icon"]:
-                        continue
-
-                    application_file[line[0]] = ''.join(line[1:]).rstrip('\n')
-
-            try:
-                desktop_files.append(DesktopFile(application_file['Name'], application_file['Exec'], data_dir, application_file['Icon']))
-            except KeyError:
-                pass
-    return desktop_files
-
-# Improve performance by using static typically used icon resolutions
-# instead of fetching and processing them each time
-#print(generate_desktop_files_list()[8].icon_path)
+        self.pinned_apps.remove_pinned_app(self.class_name)

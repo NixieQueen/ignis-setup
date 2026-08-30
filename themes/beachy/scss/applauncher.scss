@@ -1,0 +1,46 @@
+* {
+    all: unset;
+}
+
+.applauncher {
+    @include window;
+    min-width: 52rem;
+    min-height: 23rem;
+
+    .app {
+        @include apps;
+        min-height: 0rem;
+        min-width: 0rem;
+        padding: 0.6rem;
+        margin: 0.35rem;
+        &.selected {
+            @include apps($tertiary)
+        }
+    }
+
+    .gridbutton {
+        min-width: 0rem;
+        min-height: 0rem;
+        @include button;
+        &.active {
+            padding: 0.8rem 1.5rem;
+            //@include hover($secondary, $secondary);
+            background-color: $secondary;
+        }
+    }
+
+    .searchbar {
+        min-width: 0rem;
+        min-height: 0rem;
+        @include window;
+        @include font;
+        background-color: $quaternary;
+        padding: 0.8rem 5.0rem;
+    }
+
+    .refresh_button {
+        @include button;
+        //padding: 0rem;
+        margin: 0.7rem;
+    }
+}

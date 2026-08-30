@@ -1,0 +1,36 @@
+### A big configuration file
+# Theme name, should be the same as the folder found under 'themes'
+theme: beachy
+
+
+## Dynamic wallpaper settings
+# Change wallpaper by hour
+dwall_hour: False
+# Time to change wallpaper, only applies if above is 'True'
+dwall_hour_morning: 6
+dwall_hour_afternoon: 12
+dwall_hour_evening: 19
+dwall_hour_night: 23
+# Change wallpaper by month
+dwall_season: False
+# Change wallpaper by weather
+dwall_weather: False
+
+
+## Taskbars
+# Taskbar position, either standard, floating or unity
+taskbar_position: standard
+# Taskbar hiding, only works for floating layout!
+taskbar_hiding: True
+# Taskbar anchor, either linux or windows. 'Linux' is ignored when taskbar_position is set to unity
+taskbar_anchor: windows
+
+
+## Quitmenu
+# timeout timer
+quitmenu_timer: 30
+
+
+## Settings menu
+# Activation
+activation: False

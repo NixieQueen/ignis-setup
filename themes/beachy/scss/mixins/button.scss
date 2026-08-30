@@ -1,0 +1,15 @@
+@mixin button($active_color: $quaternary, $inactive_color: $quaternary_off) {
+    @include hover($active_color, $inactive_color);
+    border-radius: 2rem;
+    padding: 0.8rem 0.8rem;
+    color: $text;
+    box-shadow: 0px 5px 0px 0px color-mix(in srgb, $shadow 20%, $inactive_color 80%); 
+    margin: 0.5rem;
+    &.clicked {
+        @include hover($secondary, $secondary_off);
+    }
+    &.disabled {
+        color: $primary_off;
+    }
+
+}

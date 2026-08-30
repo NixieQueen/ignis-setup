@@ -1,0 +1,25 @@
+.quitmenu {
+    @include window;
+    //min-width: 50rem;
+    //min-height: 5rem;
+    //margin: 20rem;
+    &.timer {
+        border-radius: 1rem;
+        background-color: $quaternary_off;
+        .timerfont {
+            @include font(bold, 120px);
+        }
+        .subfont {
+            @include font();
+        }
+    }
+    &.buttons {
+        border-radius: 1rem;
+        background-color: $quaternary_off;
+        margin-top: 0px;
+        .button {
+            @include button($quinary);
+            padding: 0.1rem;
+        }
+    }
+}

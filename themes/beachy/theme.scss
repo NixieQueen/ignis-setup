@@ -1,0 +1,49 @@
+* {
+    font-weight: bold;
+}
+
+// All the basic colours and things are defined here.
+// This is the biggest part of each theme
+
+$primary: #F4F0CB;
+$primary_off: rgb(from $primary calc(r - 25%) calc(g - 24%) calc(b - 25%));
+$secondary: #B7C68B;
+$secondary_off: rgb(from $secondary calc(r - 13%) calc(g - 16%) calc(b - 9%));
+$tertiary: #DED29E;
+$tertiary_off: rgb(from $tertiary calc(r - 13%) calc(g - 16%) calc(b - 9%));
+$quaternary: #B3A580;
+$quaternary_off: rgb(from $quaternary calc(r - 23%) calc(g - 23%) calc(b - 23%));
+$quinary: #A29574;
+$quinary_off: rgb(from $quinary calc(r - 13%) calc(g - 16%) calc(b - 9%));
+
+$bg: #809164BB;
+$bg_off: #232732;
+$shadow: #010101;
+$transparent: #51576d00;
+
+$text: $primary;
+$main_text: Fira Code;
+$main_text_weight: bold;
+$main_text_size: 24px;
+$transition_speed: 0.3s;
+
+// Then every module is imported separately here
+// Starting with the global stuff like floating windows
+@import "scss/mixins/window.scss";
+@import "scss/mixins/hover.scss";
+@import "scss/mixins/button.scss";
+@import "scss/mixins/widgetborder.scss";
+@import "scss/mixins/apps.scss";
+
+@import "scss/mixins/font.scss";
+
+// Then scss scripts for all the modules!
+
+@import "scss/toppanel.scss";
+@import "scss/taskbar.scss";
+@import "scss/applauncher.scss";
+@import "scss/sidepanel.scss";
+@import "scss/quitmenu.scss";
+
+@import "scss/settingsmenu.scss";
+@import "scss/notification.scss";

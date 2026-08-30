@@ -1,0 +1,155 @@
+* {
+    all: unset;
+}
+
+.sidepanel {
+    @include window;
+    &.scroll {
+        min-width: 40rem;
+        min-height: 60rem;
+        //background-color: $bg;
+        //border-radius: 2rem;
+        box-shadow: 0px 0px 0px 0px $shadow;
+        margin: 0rem;
+        padding: 0rem;
+    }
+
+    &.profilebanner {
+        all: unset;
+        &.background {
+            @include window;
+            background-color: $quaternary_off;
+        }
+        &.profilepicturewrapper {
+            color: $quaternary_off;
+            //clip-path: circle(6rem at 12rem 8rem);
+        }
+        &.text {
+            @include window;
+            background-color: $quinary;
+            box-shadow: 0 0 0 0;
+            &.profiletext {
+                @include font;
+                font-size: 56px;
+                min-width: 15rem;
+            }
+            &.profileflavour {
+                @include font;
+                color: $tertiary;
+                font-size: 36px;
+                min-width: 15rem;
+            }
+        }
+    }
+
+    &.systray {
+        &.background {
+            background-color: $quaternary_off;
+            min-width: 22.3rem;
+        }
+        &.trayitem {
+            all: unset;
+            &.button {
+                @include button($quinary, $quinary_off);
+                margin: 0px;
+                padding: 5px;
+            }
+        }
+    }
+
+    &.sysbuttons {
+        &.background {
+            background-color: $quaternary_off;
+        }
+        &.sysbutton {
+            //all: unset;
+            @include button($quinary, $quinary_off);
+            margin: 0px;
+            padding: 5px;
+        }
+    }
+
+    &.performanceswitch {
+        &.background {
+            background-color: $quaternary_off;
+        }
+        &.button {
+            @include button($quinary, $quinary_off);
+            margin: 0px;
+            padding: 5px;
+        }
+        &.text {
+            all: unset;
+            @include font();
+            &.disabled {
+                color: $primary_off;
+            }
+        }
+        &.slider {
+            padding: 0px;
+            trough slider {
+                border-radius: 2rem;
+                background-color: $primary;
+                min-height: 2rem;
+                min-width: 10rem;
+            }
+            background-color: $primary_off;
+        }
+    }
+
+    .musicplayer {
+        @include window;
+        background-color: $quaternary_off;
+        .CD {
+            border-radius: 2rem;
+            color: $quaternary_off;
+            .centerdot {
+                background-color: $secondary;
+                min-width: 50px;
+                min-height: 50px;
+                border-radius: 2rem;
+            }
+        }
+        .seeker {
+            .slider {
+                @include button;
+                background-color: $quinary_off;
+                min-width: 15rem;
+                padding: 0.5rem;
+                border-radius: 2rem;
+                transition: 0.2s;
+                
+                trough slider {
+                    background-color: $primary;
+                    padding: 1rem;
+                    box-shadow: 0px 0px 0px 0px $shadow;
+                    border-radius: 2rem;
+                }
+                trough highlight {
+                    background-color: $primary;
+                    margin: 0.3rem;
+                    padding: 0.3rem;
+                    border-radius: 2rem 0rem 0rem 2rem;
+                }
+            }
+            .position_text {
+                @include font(bold, 14px);
+            }
+        }
+        .trackinfo {
+            .title {
+                @include font(bold, 28px);
+            }
+            .subtitle {
+                @include font(bold, 18px);
+            }
+        }
+        .buttons {
+            .mediabutton {
+                @include button($quinary, $quinary_off);
+                margin: 0.3rem;
+                padding: 0.2rem;
+            }
+        }
+    }
+}

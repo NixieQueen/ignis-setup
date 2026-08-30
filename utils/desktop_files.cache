@@ -1,0 +1,96 @@
+opentabletdriver ||| otd-gui ||| /usr/share/pixmaps/otd.png ||| /usr/share
+lshw ||| /usr/sbin/gtk-lshw ||| /usr/share/lshw/artwork/logo.svg ||| /usr/share
+thorium shell ||| /usr/bin/thorium-shell ||| /opt/chromium.org/thorium/thorium_shell.png ||| /usr/share
+star birds ||| steam steam://rungameid/2719750 ||| /home/nixie/.local/share/icons/hicolor/64x64/apps/steam_icon_2719750.png ||| /home/nixie/.local/share
+cult of the lamb ||| steam steam://rungameid/1313140 ||| /home/nixie/.local/share/icons/hicolor/64x64/apps/steam_icon_1313140.png ||| /home/nixie/.local/share
+europa universalis iv ||| steam steam://rungameid/236850 ||| /home/nixie/.icons/Papirus/96x96/apps/steam_icon_236850.svg ||| /home/nixie/.local/share
+forza horizon 6 ||| steam steam://rungameid/2483190 ||| /home/nixie/.local/share/icons/hicolor/96x96/apps/steam_icon_2483190.png ||| /home/nixie/.local/share
+meccha chameleon ||| steam steam://rungameid/4704690 ||| /home/nixie/.local/share/icons/hicolor/64x64/apps/steam_icon_4704690.png ||| /home/nixie/.local/share
+misery ||| steam steam://rungameid/2119830 ||| /home/nixie/.local/share/icons/hicolor/64x64/apps/steam_icon_2119830.png ||| /home/nixie/.local/share
+deadlock ||| steam steam://rungameid/1422450 ||| /home/nixie/.local/share/icons/hicolor/96x96/apps/steam_icon_1422450.png ||| /home/nixie/.local/share
+nexus mods app ||| /home/nixie/Downloads/NexusMods.App.x86_64.AppImage ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/default.svg ||| /home/nixie/.local/share
+waterpark simulator ||| steam steam://rungameid/3293260 ||| /home/nixie/.local/share/icons/hicolor/64x64/apps/steam_icon_3293260.png ||| /home/nixie/.local/share
+cat quest iii ||| steam steam://rungameid/2305840 ||| /home/nixie/.local/share/icons/hicolor/64x64/apps/steam_icon_2305840.png ||| /home/nixie/.local/share
+r.e.p.o. ||| steam steam://rungameid/3241660 ||| /home/nixie/.local/share/icons/hicolor/32x32/apps/steam_icon_3241660.png ||| /home/nixie/.local/share
+subnautica 2 ||| steam steam://rungameid/1962700 ||| /home/nixie/.local/share/icons/hicolor/64x64/apps/steam_icon_1962700.png ||| /home/nixie/.local/share
+casualties: unknown demo ||| steam steam://rungameid/4576510 ||| /home/nixie/.local/share/icons/hicolor/64x64/apps/steam_icon_4576510.png ||| /home/nixie/.local/share
+overwatch® ||| steam steam://rungameid/2357570 ||| /home/nixie/.local/share/icons/hicolor/48x48/apps/steam_icon_2357570.png ||| /home/nixie/.local/share
+schrodinger's cat burglar ||| steam steam://rungameid/2111550 ||| /home/nixie/.local/share/icons/hicolor/64x64/apps/steam_icon_2111550.png ||| /home/nixie/.local/share
+bcml ||| /home/nixie/.local/bcml_env/bin/python3 -m bcml ||| /home/nixie/.icons/Papirus/96x96/apps/amarok.svg ||| /home/nixie/.local/share
+europa universalis v ||| steam steam://rungameid/3450310 ||| /home/nixie/.local/share/icons/hicolor/64x64/apps/steam_icon_3450310.png ||| /home/nixie/.local/share
+cmake ||| cmake-gui ||| /home/nixie/.icons/Papirus/96x96/apps/CMakeSetup.svg ||| /usr/share
+fontforge ||| fontforge ||| /home/nixie/.icons/Papirus/96x96/apps/org.fontforge.FontForge.svg ||| /usr/share
+thunar file manager ||| thunar ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/org.xfce.thunar.svg ||| /usr/share
+gammastep indicator ||| gammastep-indicator ||| /home/nixie/.icons/Papirus/96x96/apps/gammastep.svg ||| /usr/share
+stoat ||| stoat-desktop ||| /usr/share/pixmaps/stoat-desktop.png ||| /usr/share
+avahi zeroconf browser ||| /usr/bin/avahi-discover ||| /home/nixie/.icons/Papirus/96x96/devices/network-wired.svg ||| /usr/share
+icon browser ||| yad-icon-browser ||| /home/nixie/.icons/Papirus/96x96/apps/yad.svg ||| /usr/share
+spotify (launcher) ||| spotify-launcher ||| /usr/share/pixmaps/spotify-launcher.png ||| /usr/share
+libreoffice math ||| libreoffice ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/libreoffice-math.svg ||| /usr/share
+krita ||| krita ||| /home/nixie/.icons/Papirus/96x96/apps/krita.svg ||| /usr/share
+osu!lazer ||| /usr/bin/osu-lazer ||| /usr/share/pixmaps/osu-lazer.png ||| /usr/share
+thorium browser ||| /usr/bin/thorium-browser ||| /home/nixie/.icons/Papirus/96x96/apps/thorium-browser.svg ||| /usr/share
+blackmagic raw player ||| /opt/resolve/BlackmagicRAWPlayer/BlackmagicRAWPlayer ||| /home/nixie/.icons/Papirus/96x96/apps/blackmagicraw-player.svg ||| /usr/share
+emacs ||| emacs ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/emacs.svg ||| /usr/share
+blender ||| blender ||| /home/nixie/.icons/Papirus/96x96/apps/blender.svg ||| /usr/share
+avahi ssh server browser ||| /usr/bin/bssh ||| /home/nixie/.icons/Papirus/96x96/devices/network-wired.svg ||| /usr/share
+r2modman ||| /opt/r2modman/r2modman ||| /usr/share/icons/hicolor/96x96/apps/r2modman.png ||| /usr/share
+lutris ||| lutris ||| /home/nixie/.icons/Papirus/96x96/apps/net.lutris.Lutris.svg ||| /usr/share
+file roller ||| file-roller ||| /home/nixie/.icons/Papirus/96x96/apps/org.gnome.FileRoller.svg ||| /usr/share
+bluetooth adapters ||| blueman-adapters ||| /home/nixie/.icons/Papirus/96x96/devices/blueman-device.svg ||| /usr/share
+amdgpu top (gui) ||| amdgpu_top --gui ||| /home/nixie/.icons/Papirus/96x96/apps/utilities-system-monitor.svg ||| /usr/share
+libreoffice ||| libreoffice ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/libreoffice-startcenter.svg ||| /usr/share
+vlc media player ||| /usr/bin/vlc ||| /home/nixie/.icons/Papirus/96x96/apps/vlc.svg ||| /usr/share
+steam ||| /usr/bin/steam ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/steam.svg ||| /usr/share
+lact ||| lact gui ||| /usr/share/icons/hicolor/scalable/apps/io.github.ilya_zlobintsev.LACT.svg ||| /usr/share
+qt assistant ||| assistant6 ||| /home/nixie/.icons/Papirus/96x96/apps/assistant.svg ||| /usr/share
+openjdk java 11 shell ||| /usr/lib/jvm/java-11-openjdk/bin/jshell ||| /home/nixie/.icons/Papirus/96x96/apps/java11-openjdk.svg ||| /usr/share
+manage printing ||| xdg-open http://localhost:631/ ||| /home/nixie/.icons/Papirus/96x96/apps/cups.svg ||| /usr/share
+bluetooth manager ||| blueman-manager ||| /home/nixie/.icons/Papirus/96x96/apps/blueman.svg ||| /usr/share
+libreoffice base ||| libreoffice ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/libreoffice-base.svg ||| /usr/share
+vim ||| vim ||| /home/nixie/.icons/Papirus/96x96/apps/gvim.svg ||| /usr/share
+davinci resolve ||| /opt/resolve/bin/resolve ||| /home/nixie/.icons/Papirus/96x96/apps/davinci-resolve.svg ||| /usr/share
+tor browser ||| torbrowser-launcher ||| /home/nixie/.icons/Papirus/96x96/apps/org.torproject.torbrowser-launcher.svg ||| /usr/share
+qt v4l2 video capture utility ||| qvidcap ||| /home/nixie/.icons/Papirus/96x96/apps/qvidcap.svg ||| /usr/share
+document viewer ||| evince ||| /home/nixie/.icons/Papirus/96x96/apps/org.gnome.Evince.svg ||| /usr/share
+yad settings ||| yad-settings ||| /home/nixie/.icons/Papirus/96x96/apps/yad.svg ||| /usr/share
+qt d-bus viewer ||| qdbusviewer6 ||| /home/nixie/.icons/Papirus/96x96/apps/qdbusviewer.svg ||| /usr/share
+kitty ||| kitty ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/kitty.svg ||| /usr/share
+gpu screen recorder ||| gsr-ui launch-hide-announce ||| /home/nixie/.icons/Papirus/96x96/apps/gpu-screen-recorder.svg ||| /usr/share
+openjdk java 11 console ||| /usr/lib/jvm/java-11-openjdk/bin/jconsole ||| /home/nixie/.icons/Papirus/96x96/apps/java11-openjdk.svg ||| /usr/share
+davinci control panels setup ||| davinci-control-panels-setup ||| /usr/share/icons/hicolor/128x128/apps/davinci-resolve-panels-setup.png ||| /usr/share
+avahi vnc server browser ||| /usr/bin/bvnc ||| /home/nixie/.icons/Papirus/96x96/devices/network-wired.svg ||| /usr/share
+thunderbird ||| thunderbird ||| /home/nixie/.icons/Papirus/96x96/apps/org.mozilla.Thunderbird.svg ||| /usr/share
+eye of gnome ||| eog ||| /home/nixie/.icons/Papirus/96x96/apps/org.gnome.eog.svg ||| /usr/share
+qt widgets designer ||| designer6 ||| /home/nixie/.icons/Papirus/96x96/apps/designer.svg ||| /usr/share
+bulk rename ||| thunar ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/org.xfce.thunar.svg ||| /usr/share
+qt v4l2 test utility ||| qv4l2 ||| /home/nixie/.icons/Papirus/96x96/apps/qv4l2.svg ||| /usr/share
+libreoffice draw ||| libreoffice ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/libreoffice-draw.svg ||| /usr/share
+libreoffice writer ||| libreoffice ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/libreoffice-writer.svg ||| /usr/share
+winetricks ||| winetricks --gui ||| /home/nixie/.icons/Papirus/96x96/apps/winetricks.svg ||| /usr/share
+volume control ||| pavucontrol ||| /home/nixie/.icons/Papirus/96x96/apps/org.pulseaudio.pavucontrol.svg ||| /usr/share
+qjackctl ||| qjackctl -platform xcb ||| /home/nixie/.icons/Papirus/96x96/apps/org.rncbc.qjackctl.svg ||| /usr/share
+qbittorrent ||| qbittorrent ||| /home/nixie/.icons/Papirus/96x96/apps/qbittorrent.svg ||| /usr/share
+solaar ||| solaar ||| /home/nixie/.icons/Papirus/96x96/apps/solaar.svg ||| /usr/share
+libreoffice impress ||| libreoffice ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/libreoffice-impress.svg ||| /usr/share
+blackmagic raw speed test ||| /opt/resolve/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest ||| /home/nixie/.icons/Papirus/96x96/apps/blackmagicraw-speedtest.svg ||| /usr/share
+qt linguist ||| linguist6 ||| /home/nixie/.icons/Papirus/96x96/apps/linguist.svg ||| /usr/share
+openjdk java 26 console ||| /usr/lib/jvm/java-26-openjdk/bin/jconsole ||| /usr/share/icons/hicolor/48x48/apps/java26-openjdk.png ||| /usr/share
+oracle virtualbox ||| VirtualBox ||| /home/nixie/.icons/Papirus/96x96/apps/virtualbox.svg ||| /usr/share
+hardware locality lstopo ||| lstopo ||| /home/nixie/.icons/Papirus/96x96/apps/hwloc.svg ||| /usr/share
+emacs (client) ||| sh -c "if [ -n \\"\\$*\\" ]; then exec /usr/bin/emacsclient \\"\\$@\\"; else exec emacsclient fi" sh ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/emacs.svg ||| /usr/share
+discord ||| /usr/bin/discord ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/discord.png ||| /usr/share
+libreoffice calc ||| libreoffice ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/libreoffice-calc.svg ||| /usr/share
+librewolf ||| /usr/lib/librewolf/librewolf ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/librewolf.svg ||| /usr/share
+about xfce ||| xfce4-about ||| /home/nixie/.icons/Papirus/96x96/apps/org.xfce.about.svg ||| /usr/share
+prism launcher ||| prismlauncher ||| /home/nixie/.icons/Papirus/96x96/apps/org.prismlauncher.PrismLauncher.svg ||| /usr/share
+ckb-next ||| /usr/bin/ckb-next ||| /home/nixie/.icons/Papirus/96x96/apps/ckb-next.svg ||| /usr/share
+files ||| nautilus ||| /home/nixie/.icons/Papirus/96x96/apps/org.gnome.Nautilus.svg ||| /usr/share
+tor browser launcher settings ||| torbrowser-launcher ||| /home/nixie/.icons/Papirus/96x96/apps/org.torproject.torbrowser-launcher.svg ||| /usr/share
+mpv media player ||| mpv ||| /home/nixie/.icons/Papirus/96x96/apps/mpv.svg ||| /usr/share
+popsicle usb flasher ||| popsicle-gtk ||| /home/nixie/.icons/Papirus/96x96/apps/com.system76.Popsicle.svg ||| /usr/share
+btop++ ||| btop ||| /home/nixie/.icons/Papirus/96x96/apps/btop.svg ||| /usr/share
+openjdk java 26 shell ||| /usr/lib/jvm/java-26-openjdk/bin/jshell ||| /usr/share/icons/hicolor/48x48/apps/java26-openjdk.png ||| /usr/share
+thunar preferences ||| thunar-settings ||| /home/nixie/Documents/git-projects/ignis/themes/cutesy/apps/org.xfce.thunar.svg ||| /usr/share
+deadlock mod manager ||| /usr/bin/flatpak run dev.stormix.deadlock-mod-manager @@u @@ ||| /var/lib/flatpak/exports/share/icons/hicolor/32x32/apps/dev.stormix.deadlock-mod-manager.png ||| /var/lib/flatpak/exports/share
+nyarch assistant ||| /usr/bin/flatpak run moe.nyarchlinux.assistant ||| /var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/moe.nyarchlinux.assistant.svg ||| /var/lib/flatpak/exports/share

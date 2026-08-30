@@ -10,5 +10,6 @@
 #
 from .workspaces import Workspace
 from .clock import Clock
+from .services import Services
 
-__all__ = ["Workspace", "Clock"]
+__all__ = ["Workspace", "Clock", "Services"]

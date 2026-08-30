@@ -1,0 +1,70 @@
+.notification-popup {
+    @include window;
+    min-width: 25rem;
+
+    & .notification-close {
+        @include button;
+        margin: 0rem;
+        padding: 0rem;
+    }
+
+    & .notification-action {
+        @include button;
+        margin: 0.2rem;
+        padding: 0rem;
+    }
+}
+
+
+.notification {
+    background-color: $primary;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.notification-count {
+    background-color: $tertiary;
+    color: $primary;
+    min-width: 2rem;
+    font-size: 1.5rem;
+    border-radius: 2rem;
+}
+
+.notification-header-label {
+    font-size: 1.1rem;
+    margin-left: 0.5rem;
+}
+
+.notification-close {
+    @include button;
+    color: $primary;
+    border-radius: 1rem;
+    padding: 0.25rem;
+    margin-left: 0.5rem;
+    transition: 0.3s;
+}
+
+.notification-clear-all {
+    @include button;
+    transition: 0.3s;
+    border-radius: 1rem;
+    padding: 0.25rem 1rem;
+}
+
+.notification-action {
+    color: $primary;
+    @include button;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.25rem;
+    transition: 0.3s;
+}
+
+.notification-screenshot-label {
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.notification-body {
+    color: $primary;
+}
