@@ -1,5 +1,5 @@
 *__pycache__
 *pinned_apps
-./backgrounds/*
-./themes/**/activebackgrounds/*
-!./themes/**/activebackgrounds/default.png
+backgrounds/*
+themes/**/activebackgrounds/*
+!themes/**/activebackgrounds/default.png
